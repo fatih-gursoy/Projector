@@ -30,12 +30,17 @@ class MainViewController: UIViewController {
         genreCollectionView.register(UINib(nibName: "GenreCellView", bundle: nil), forCellWithReuseIdentifier: "GenreCell")
         moviesCollectionView.register(UINib(nibName: "MovieCellView", bundle: nil), forCellWithReuseIdentifier: "MovieCell")
         
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: nil)
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(toSearchVC))
         
         fetchMovieList(listName: Header.nowPlaying.rawValue)
         fetchGenres()
         collectionViewAnimate()
    
+    }
+    
+    @objc func toSearchVC() {
+        
+        performSegue(withIdentifier: "toSearhVC", sender: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,9 +96,9 @@ class MainViewController: UIViewController {
         
         WebService().downloadGenres { genreList in
             guard let genreList = genreList else {return}
-
-            self.genreViewModel = GenreViewModel(genreList: genreList.genres)
             
+            self.genreViewModel = GenreViewModel(genreList: genreList.genres)
+
             DispatchQueue.main.async {
                 self.genreCollectionView.reloadData()
             }
@@ -147,8 +152,19 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as! GenreCell
 
-            cell.genreLabel.text = genreViewModel?.genreList?[indexPath.row].name
-            
+            if let genre = genreViewModel?.genreList?[indexPath.row] {
+                
+                cell.genreLabel.text = genre.name
+
+                if genre.isSelected == false || genre.isSelected == nil {
+                    cell.backView.backgroundColor = .clear
+                    cell.genreLabel.textColor = .black
+                } else if genre.isSelected == true {
+                    cell.backView.backgroundColor = .darkGray
+                    cell.genreLabel.textColor = .white
+                }
+            }
+        
             return cell
             
         case moviesCollectionView:
@@ -222,6 +238,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        var headerIndex = Int()
+        
         if collectionView == moviesCollectionView {
             performSegue(withIdentifier: "toMovieDetail", sender: indexPath)
         }
@@ -233,32 +251,46 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             cell.headerLabel.textColor = .black
             cell.headerLabel.font = .boldSystemFont(ofSize: 20)
 
-            fetchMovieList(listName: Header.allCases[indexPath.row].rawValue)
+            headerIndex = indexPath.row
+            fetchMovieList(listName: Header.allCases[headerIndex].rawValue)
         }
         
         if collectionView == genreCollectionView {
             
             let cell = collectionView.cellForItem(at: indexPath) as! GenreCell
+            
+            genreViewModel?.selectGenreAtIndex(indexPath.row)
 
             cell.backView.backgroundColor = .darkGray
-	            cell.genreLabel.textColor = .white
-            
+            cell.genreLabel.textColor = .white
+                        
             var selectedGenres = [Genre]()
             
-            if let selectedItems = collectionView.indexPathsForSelectedItems {
+            if let indexPaths = collectionView.indexPathsForSelectedItems {
                 
-                for item in selectedItems {
-                    if let genre = genreViewModel?.genreList?[item.row] {
-                        selectedGenres.append(genre)
+                for indexPath in indexPaths {
+                    
+                    if let genre = genreViewModel?.genreList?[indexPath.row] {
+                        if genre.isSelected == true {
+                            selectedGenres.append(genre)
+                        }
                     }
                 }
             }
             
             guard let filteredMovies = moviesViewModel?.filterByGenre(selectedGenres) else {return}
-            moviesViewModel = MoviesViewModel(movieList: filteredMovies)
+            
+            if selectedGenres.count > 0 {
+                moviesViewModel = MoviesViewModel(movieList: filteredMovies)
+            } else {
+                fetchMovieList(listName: Header.allCases[headerIndex].rawValue)
+            }
+            
+                
             moviesCollectionView.reloadData()
+            
+            collectionView.reloadData()
         }
-        
     }
     
     

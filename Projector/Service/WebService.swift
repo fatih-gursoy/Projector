@@ -50,9 +50,9 @@ class WebService {
         
         request.validate().responseDecodable(of: GenreList.self) { response in
 
-            guard let genres = response.value else {return}
-            
-            completion(genres)
+                guard let genres = response.value else {return}
+                
+                completion(genres)
         }
     }
         
@@ -67,6 +67,21 @@ class WebService {
             guard let credits = response.value else {return}
 
             completion(credits)
+        }
+        
+    }
+    
+    func searchMovies(searchQuery: String, completion: @escaping (MovieList?) -> ()) {
+    
+        let url = "\(API.baseURL)/search/movie?api_key=\(apiKey)&query=\(searchQuery)&include_adult=false"
+        
+        let request = AF.request(url)
+        
+        request.validate().responseDecodable(of: MovieList.self) { response in
+
+            guard let movieList = response.value else {return}
+            completion(movieList)
+
         }
         
     }

@@ -10,7 +10,7 @@ import Alamofire
 
 struct MoviesViewModel {
     
-    let movieList: [Movie]
+    var movieList: [Movie]
     
     var count : Int {
         return movieList.count
@@ -21,6 +21,12 @@ struct MoviesViewModel {
         let movie = self.movieList[index]
         return MovieViewModel(movie: movie)
         
+    }
+    
+    mutating func addMovie(movie: Movie) {
+
+        movieList.append(movie)
+
     }
     
     var movieIdList: [String?] {
@@ -36,9 +42,10 @@ struct MoviesViewModel {
         var filteredMovies = [Movie]()
         
         for movie in movieList {
+            
             for genre in selectedGenres {
                 
-                if (movie.genreIDS?.contains { $0 == genre.id } ) == true {
+                if (movie.genreIDs?.contains { $0 == genre.id } ) == true {
                     filteredMovies.append(movie)
                 }
             }
@@ -100,12 +107,22 @@ struct MovieViewModel {
         let year = dt.string(from: releaseDate)
         return year
     }
-
     
 }
 
 struct GenreViewModel {
     
-    let genreList: [Genre]?
+    var genreList: [Genre]?
+    
+    mutating func selectGenreAtIndex(_ index:Int) {
+        
+        if let selection = self.genreList?[index].isSelected {
+            self.genreList?[index].isSelected = !selection
+        } else {
+            self.genreList?[index].isSelected = true
+        }
+    }
     
 }
+
+

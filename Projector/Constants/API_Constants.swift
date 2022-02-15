@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum Header: String, CaseIterable {
 
@@ -31,8 +32,8 @@ struct API {
     static let ImageBaseURL = "http://image.tmdb.org/t/p/w500"
     static let backdropBaseURL = "http://image.tmdb.org/t/p/w780"
     
-    
 }
+
 
 
 

@@ -21,13 +21,13 @@
                         <rect key="frame" x="10" y="10" width="336" height="119"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7D2-2L-ifc">
-                                <rect key="frame" x="0.0" y="0.0" width="119" height="119"/>
+                                <rect key="frame" x="0.0" y="12" width="95" height="95"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7D2-2L-ifc" secondAttribute="height" multiplier="1:1" id="DMT-9e-Xas"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="xKj-kf-1Hh">
-                                <rect key="frame" x="139" y="29" width="197" height="61"/>
+                                <rect key="frame" x="115" y="29" width="221" height="61"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bWR-fH-Wwb">
                                         <rect key="frame" x="0.0" y="0.0" width="83" height="20.5"/>
@@ -53,6 +53,9 @@
                                 </subviews>
                             </stackView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="7D2-2L-ifc" firstAttribute="height" secondItem="QPc-iV-N9o" secondAttribute="height" multiplier="0.8" id="p5u-uQ-snN"/>
+                        </constraints>
                     </stackView>
                 </subviews>
                 <constraints>

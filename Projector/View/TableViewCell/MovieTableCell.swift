@@ -20,7 +20,9 @@ class MovieTableCell: UITableViewCell {
         movieImage.layer.shadowOffset = CGSize(width: 20, height: 20)
         movieImage.layer.shadowRadius = 10.0
         movieImage.layer.shadowOpacity = 0.5
-        movieImage.layer.masksToBounds = false
+        movieImage.layer.masksToBounds = true
+        movieImage.layer.cornerRadius = 10.0
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

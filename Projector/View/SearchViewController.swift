@@ -1,64 +1,65 @@
 //
-//  WatchListVC.swift
+//  SearchViewController.swift
 //  Projector
 //
-//  Created by Fatih Gursoy on 8.02.2022.
+//  Created by Fatih Gursoy on 11.02.2022.
 //
 
 import UIKit
-import CoreData
 
-class WatchListVC: UIViewController {
+class SearchViewController: UIViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var movieTableView: UITableView!
     
     private var moviesViewModel: MoviesViewModel?
-    var movieIdList = [WatchList]()
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         movieTableView.delegate = self
         movieTableView.dataSource = self
-        
+        searchBar.delegate = self
+
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
         
     }
     
-   
-    override func viewWillAppear(_ animated: Bool) {
-        
-        fetchWatchList()
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+                
+        if segue.identifier == "toMovieDetail"  {
+            
+            let vc = segue.destination as! MovieDetailVC
+            let indexPath = sender as! IndexPath
+            
+            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
+
+        }
     }
     
-    func fetchWatchList() {
+}
 
-        movieIdList = CoreService().fetchWatchList()
-        
-        moviesViewModel = MoviesViewModel(movieList: [])
-        
-        for item in movieIdList {
+
+extension SearchViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        WebService().searchMovies(searchQuery: searchText) { movies in
             
-            if let movieId = item.movieId {
-                
-                WebService().downloadMovieDetail(movieId: movieId) { movie in
-                    guard let movie = movie else {return}
-                    
-                    self.moviesViewModel?.addMovie(movie: movie)
-                    
-                    DispatchQueue.main.async {
-                        self.movieTableView.reloadData()
-                    }
-                }
+            guard let movies = movies?.results else {return}
+            
+            self.moviesViewModel = MoviesViewModel(movieList: movies)
+            
+            DispatchQueue.main.async {
+                self.movieTableView.reloadData()
             }
         }
     }
-
+    
 }
 
-extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -85,31 +86,19 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
             cell.movieRating.text = String(describing: rating)
             
         }
+        
         return cell
 
     }
     
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if editingStyle == .delete {
-            
-            CoreService().deleteItem(with: movieIdList[indexPath.row])
-            CoreService().saveToCoreData()
-            fetchWatchList()
-            tableView.reloadData()
-        }
-    }
-    
-    
-}
-
-
-extension WatchListVC: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        performSegue(withIdentifier: "toMovieDetail", sender: indexPath)
         
         
     }
     
+    
 }
+    

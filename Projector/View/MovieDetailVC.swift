@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 import SDWebImage
 
 class MovieDetailVC: UIViewController {
@@ -63,7 +64,6 @@ class MovieDetailVC: UIViewController {
         moreButton.titleLabel?.numberOfLines = 0
         moreButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
-        
     }
     
     
@@ -109,7 +109,35 @@ class MovieDetailVC: UIViewController {
     
     
     @IBAction func addButtonClicked(_ sender: Any) {
-    
+
+        let items = CoreService().fetchWatchList()
+        let context = CoreDataModel.context
+        
+        if items.count < 1 {
+            
+            let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
+            
+            newMovie.setValue(movieViewModel?.id, forKey:"movieId")
+            
+        } else {
+            
+            if !(items.contains(where: { $0.movieId == movieViewModel?.id})) {
+                let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
+                
+                newMovie.setValue(movieViewModel?.id, forKey:"movieId")
+            } else {
+                makeAlert(titleString: "The movie exists in Watch List", messageString: "")
+            }
+        }
+        
+        do {
+           try context.save()
+            
+            makeAlert(titleString: "Added to Watch List", messageString: "")
+            
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
 

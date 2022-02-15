@@ -110,11 +110,52 @@
                         <outlet property="headerCollectionView" destination="nuU-4N-Owu" id="zM5-Or-9uV"/>
                         <outlet property="moviesCollectionView" destination="anp-tp-DpW" id="eJ4-P6-R8S"/>
                         <segue destination="byE-Ly-gYm" kind="show" identifier="toMovieDetail" id="G5W-Nh-T6e"/>
+                        <segue destination="KBg-G8-KzW" kind="show" identifier="toSearhVC" id="Bl0-Sh-KMg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1802.8985507246377" y="79.6875"/>
+        </scene>
+        <!--Search View Controller-->
+        <scene sceneID="hIb-tX-H2n">
+            <objects>
+                <viewController id="KBg-G8-KzW" customClass="SearchViewController" customModule="Projector" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="liE-ot-uQI">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="100" estimatedRowHeight="100" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ZXL-VO-ZfI">
+                                <rect key="frame" x="0.0" y="139" width="414" height="674"/>
+                                <color key="sectionIndexBackgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <searchBar contentMode="redraw" placeholder="Search a movie" translatesAutoresizingMaskIntoConstraints="NO" id="Gas-Pf-xMx">
+                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="qmq-tf-iGp"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Gas-Pf-xMx" firstAttribute="top" secondItem="qmq-tf-iGp" secondAttribute="top" id="82x-CU-crv"/>
+                            <constraint firstItem="qmq-tf-iGp" firstAttribute="trailing" secondItem="ZXL-VO-ZfI" secondAttribute="trailing" id="byx-Of-7tS"/>
+                            <constraint firstItem="qmq-tf-iGp" firstAttribute="bottom" secondItem="ZXL-VO-ZfI" secondAttribute="bottom" id="hJo-Ng-Kd0"/>
+                            <constraint firstItem="ZXL-VO-ZfI" firstAttribute="leading" secondItem="liE-ot-uQI" secondAttribute="leading" id="jgF-UL-BdY"/>
+                            <constraint firstItem="Gas-Pf-xMx" firstAttribute="leading" secondItem="qmq-tf-iGp" secondAttribute="leading" id="nry-9j-9Yi"/>
+                            <constraint firstItem="ZXL-VO-ZfI" firstAttribute="top" secondItem="Gas-Pf-xMx" secondAttribute="bottom" id="suO-ZY-Z59"/>
+                            <constraint firstAttribute="trailing" secondItem="Gas-Pf-xMx" secondAttribute="trailing" id="ugG-IV-pqC"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="cch-M0-GmT"/>
+                    <connections>
+                        <outlet property="movieTableView" destination="ZXL-VO-ZfI" id="f64-q6-dcs"/>
+                        <outlet property="searchBar" destination="Gas-Pf-xMx" id="gWa-Ax-qvz"/>
+                        <segue destination="byE-Ly-gYm" kind="show" identifier="toMovieDetail" id="iQ4-Vb-nVf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="21u-AA-LCx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1803" y="816"/>
         </scene>
         <!--Movie DetailVC-->
         <scene sceneID="phk-SV-CTk">
@@ -406,9 +447,9 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="sjB-PV-PlP">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="100" estimatedRowHeight="100" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="sjB-PV-PlP">
                                 <rect key="frame" x="0.0" y="95" width="414" height="718"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="sectionIndexBackgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="slk-gc-xrX"/>
@@ -476,9 +517,12 @@
             <point key="canvasLocation" x="-17.39130434782609" y="79.6875"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="iQ4-Vb-nVf"/>
+    </inferredMetricsTieBreakers>
     <resources>
-        <image name="chevron.backward.circle.fill" catalog="system" width="128" height="121"/>
         <image name="chevron.backward.circle.fill" width="128" height="128"/>
+        <image name="chevron.backward.circle.fill" catalog="system" width="128" height="121"/>
         <image name="list.star" catalog="system" width="128" height="94"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>

@@ -4,6 +4,6 @@
         <attribute name="movieId" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="WatchList" positionX="-54" positionY="-9" width="128" height="44"/>
+        <element name="WatchList" positionX="-63" positionY="-18" width="128" height="44"/>
     </elements>
 </model>
