@@ -10,7 +10,7 @@ import Alamofire
 
 class WebService {
 
-    private let apiKey = "APIKEY"
+    private let apiKey = Keys.apiKey
     
     func downloadMovies(listName: String, completion: @escaping (MovieList?) -> ()) {
     
