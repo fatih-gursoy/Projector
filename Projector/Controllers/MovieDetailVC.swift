@@ -12,7 +12,6 @@ import SDWebImage
 class MovieDetailVC: UIViewController {
     
     @IBOutlet weak var movieImage: UIImageView!
-    
     @IBOutlet weak var movieNameLabel: UILabel!
     @IBOutlet weak var overviewText: UILabel!
     @IBOutlet weak var cardView: UIView!
@@ -20,7 +19,6 @@ class MovieDetailVC: UIViewController {
     @IBOutlet weak var voteCountLabel: UILabel!
     @IBOutlet weak var runTimeLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
-    
     @IBOutlet weak var moreButton: UIButton!
     
     @IBOutlet weak var genreCollectionView: UICollectionView!

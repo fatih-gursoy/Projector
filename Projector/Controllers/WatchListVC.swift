@@ -22,6 +22,9 @@ class WatchListVC: UIViewController {
         movieTableView.delegate = self
         movieTableView.dataSource = self
         
+        searchBar.delegate = self
+        hideKeyboard()
+        
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
         
     }
@@ -102,6 +105,8 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     
+    
+    
 }
 
 
@@ -109,7 +114,16 @@ extension WatchListVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        
+        if let filtered = moviesViewModel?.movieList.filter({ ($0.title?.contains(searchText) == true)}) {
+    
+            if filtered.count > 0 {
+            moviesViewModel = MoviesViewModel(movieList: filtered)
+            } else {
+                
+                fetchWatchList()
+            }
+        }
+        movieTableView.reloadData()
     }
     
 }

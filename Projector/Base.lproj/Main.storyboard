@@ -518,11 +518,11 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="iQ4-Vb-nVf"/>
+        <segue reference="G5W-Nh-T6e"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="chevron.backward.circle.fill" width="128" height="128"/>
         <image name="chevron.backward.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="chevron.backward.circle.fill" width="128" height="128"/>
         <image name="list.star" catalog="system" width="128" height="94"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>

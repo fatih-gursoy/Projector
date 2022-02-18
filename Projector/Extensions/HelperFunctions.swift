@@ -20,3 +20,18 @@ func cellLayout(_ image: UIImageView) {
     image.layer.shadowOpacity = 0.7
     image.layer.masksToBounds = true
 }
+
+extension UIViewController {
+    
+    func hideKeyboard() {
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+}

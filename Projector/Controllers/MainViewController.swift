@@ -32,6 +32,10 @@ class MainViewController: UIViewController {
         
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(toSearchVC))
         
+        let logo = UIImage(named: "logo")
+        let imageView = UIImageView(image: logo)
+        self.navigationItem.titleView = imageView
+        
         fetchMovieList(listName: Header.nowPlaying.rawValue)
         fetchGenres()
         collectionViewAnimate()

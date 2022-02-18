@@ -20,6 +20,7 @@ class SearchViewController: UIViewController {
         movieTableView.delegate = self
         movieTableView.dataSource = self
         searchBar.delegate = self
+        hideKeyboard()
 
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
         

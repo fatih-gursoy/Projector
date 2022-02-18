@@ -16,7 +16,7 @@ class CoreService {
     func fetchWatchList() -> [WatchList] {
 
         var requests = [WatchList]()
-
+        
         do {
             requests = try context.fetch(fetchRequest)
             return requests
