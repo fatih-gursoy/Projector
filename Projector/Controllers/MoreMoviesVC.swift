@@ -1,18 +1,18 @@
 //
-//  SearchViewController.swift
+//  MoreMoviesVC.swift
 //  Projector
 //
-//  Created by Fatih Gursoy on 11.02.2022.
+//  Created by Fatih Gursoy on 23.02.2022.
 //
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class MoreMoviesVC: UIViewController {
 
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var movieTableView: UITableView!
     
     private var moviesViewModel: MoviesViewModel?
+    var movieId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,34 +20,15 @@ class SearchViewController: UIViewController {
         movieTableView.delegate = self
         movieTableView.dataSource = self
         
-        searchBar.delegate = self
-        hideKeyboard()
-
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
+
+        fetchMovies()
+    }
+    
+    
+    func fetchMovies() {
         
-    }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                
-        if segue.identifier == "toMovieDetail"  {
-            
-            let vc = segue.destination as! MovieDetailVC
-            let indexPath = sender as! IndexPath
-            
-            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
-
-        }
-    }
-    
-}
-
-
-extension SearchViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
-        WebService().searchMovies(searchQuery: searchText) { movies in
+        WebService().downloadSimilarMovies(movieId: movieId!) { movies in
             
             guard let movies = movies?.results else {return}
             
@@ -58,22 +39,21 @@ extension SearchViewController: UISearchBarDelegate {
             }
         }
     }
-    
+
+
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         guard let count = moviesViewModel?.count else {return 0}
         return count
-        
     }
-    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableCell", for: indexPath) as! MovieTableCell
+        let cell = movieTableView.dequeueReusableCell(withIdentifier: "MovieTableCell", for: indexPath) as! MovieTableCell
         
         if let movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row) {
             
@@ -88,21 +68,32 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             let rating = movieViewModel.movie.voteAverage ?? 0
             cell.movieRating.text = String(describing: rating)
             cell.accessoryType = .detailDisclosureButton
-            
+
         }
         
         return cell
-
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        performSegue(withIdentifier: "toMovieDetail", sender: indexPath)
-        
-        
+        performSegue(withIdentifier: "toMovieDetailVC", sender: indexPath)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+                
+        if segue.identifier == "toMovieDetailVC"  {
+            
+            let vc = segue.destination as! MovieDetailVC
+            let indexPath = sender as! IndexPath
+            
+            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
+
+        }
     }
     
     
-}
     
+    
+    
+}

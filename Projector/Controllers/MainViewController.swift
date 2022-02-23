@@ -44,7 +44,7 @@ class MainViewController: UIViewController {
     
     @objc func toSearchVC() {
         
-        performSegue(withIdentifier: "toSearhVC", sender: nil)
+        performSegue(withIdentifier: "toSearchVC", sender: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -83,7 +83,20 @@ class WebService {
             completion(movieList)
 
         }
+    }
+    
+    func downloadSimilarMovies(movieId: String, completion: @escaping (MovieList?) -> ()) {
+    
+        let url = "\(API.baseURL)/movie/\(movieId)/similar?api_key=\(apiKey)"
         
+        let request = AF.request(url)
+        
+        request.validate().responseDecodable(of: MovieList.self) { response in
+
+            guard let movieList = response.value else {return}
+            completion(movieList)
+
+        }
     }
     
     

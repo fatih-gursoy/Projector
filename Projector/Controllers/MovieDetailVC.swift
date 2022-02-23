@@ -137,6 +137,26 @@ class MovieDetailVC: UIViewController {
             print(error.localizedDescription)
         }
     }
+    
+    
+    
+    @IBAction func moreLikeButtonClicked(_ sender: Any) {
+        
+        performSegue(withIdentifier: "toMoreLikeVC", sender: nil)
+        
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "toMoreLikeVC" {
+            let vc = segue.destination as! MoreMoviesVC
+            vc.movieId = movieViewModel?.id
+            
+            
+        }
+    }
+    
 
 
 }

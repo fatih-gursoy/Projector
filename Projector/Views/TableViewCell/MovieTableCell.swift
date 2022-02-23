@@ -12,6 +12,7 @@ class MovieTableCell: UITableViewCell {
     @IBOutlet weak var movieImage: UIImageView!
     @IBOutlet weak var movieTitle: UILabel!
     @IBOutlet weak var movieRating: UILabel!
+    @IBOutlet weak var addButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,7 +23,12 @@ class MovieTableCell: UITableViewCell {
         movieImage.layer.shadowOpacity = 0.5
         movieImage.layer.masksToBounds = true
         movieImage.layer.cornerRadius = 10.0
-
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
+        self.addGestureRecognizer(tap)
+        tap.cancelsTouchesInView = false
+        
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

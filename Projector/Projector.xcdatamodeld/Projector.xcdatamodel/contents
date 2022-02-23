@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="WatchList" representedClassName="WatchList" syncable="YES" codeGenerationType="class">
+        <attribute name="isWatched" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="movieId" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="WatchList" positionX="-54" positionY="-9" width="128" height="44"/>
+        <element name="WatchList" positionX="-54" positionY="-9" width="128" height="59"/>
     </elements>
 </model>

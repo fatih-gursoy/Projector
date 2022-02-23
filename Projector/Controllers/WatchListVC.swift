@@ -78,7 +78,6 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
         if let movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row) {
             
             cell.movieTitle.text = movieViewModel.MovieTitle
-
             if let posterPath = movieViewModel.movie.posterPath {
 
                 cell.movieImage.sd_setImage(with: URL(string: API.ImageBaseURL+posterPath))
@@ -86,8 +85,13 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
 
             let rating = movieViewModel.movie.voteAverage ?? 0
             cell.movieRating.text = String(describing: rating)
+            cell.addButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+            cell.addButton.setImage(UIImage(systemName: "questionmark"), for: .normal)
+
+            
             
         }
+        
         return cell
 
     }
@@ -104,7 +108,23 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        performSegue(withIdentifier: "toMovieDetailVC", sender: indexPath)
+
+    }
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+                
+        if segue.identifier == "toMovieDetailVC" {
+
+            let vc = segue.destination as! MovieDetailVC
+            let indexPath = sender as! IndexPath
+            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
+
+        }
+    }
     
     
 }
