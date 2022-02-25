@@ -10,10 +10,10 @@ import CoreData
 
 class CoreService {
     
-    let context = CoreDataModel.context
-    let fetchRequest = NSFetchRequest<WatchList>(entityName: CoreDataModel.entitiyName)
+    private let context = CoreDataModel.context
+    private let fetchRequest = NSFetchRequest<WatchList>(entityName: CoreDataModel.entitiyName)
  
-    func fetchWatchList() -> [WatchList] {
+    func fetchData() -> [WatchList] {
 
         var requests = [WatchList]()
         
@@ -24,6 +24,22 @@ class CoreService {
             print(error.localizedDescription)
         }
         return requests
+    }
+    
+    func fetchMovie(_ movieId: String) -> WatchList? {
+        
+        var requests = [WatchList]()
+        
+        do {
+            requests = try context.fetch(fetchRequest)
+            let movie = requests.filter { $0.movieId == movieId }
+            return movie.first
+            
+        } catch {
+            print(error.localizedDescription)
+        }
+
+        return WatchList()
     }
     
     func saveToCoreData() {

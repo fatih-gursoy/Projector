@@ -14,7 +14,7 @@ class WatchListVC: UIViewController {
     @IBOutlet weak var movieTableView: UITableView!
     
     private var moviesViewModel: MoviesViewModel?
-    var movieIdList = [WatchList]()
+    var watchList = [WatchList]()
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,31 +26,44 @@ class WatchListVC: UIViewController {
         hideKeyboard()
         
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
-        
+     
+        fetchWatchList()
+
     }
     
    
     override func viewWillAppear(_ animated: Bool) {
-        
         fetchWatchList()
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+                
+        if segue.identifier == "toMovieDetailVC" {
+
+            let vc = segue.destination as! MovieDetailVC
+            let indexPath = sender as! IndexPath
+            vc.movieId = moviesViewModel?.movieAtIndex(indexPath.row).id
+
+        }
     }
     
     func fetchWatchList() {
 
-        movieIdList = CoreService().fetchWatchList()
-        
+        watchList = CoreService().fetchData()
         moviesViewModel = MoviesViewModel(movieList: [])
         
-        for item in movieIdList {
+        for item in watchList {
             
             if let movieId = item.movieId {
                 
                 WebService().downloadMovieDetail(movieId: movieId) { movie in
                     guard let movie = movie else {return}
                     
-                    self.moviesViewModel?.addMovie(movie: movie)
+                    var movieViewModel = MovieViewModel(movie: movie)
+                    movieViewModel.updateWatchStatus()
                     
+                    self.moviesViewModel?.addMovie(movie: movieViewModel.movie)
+
                     DispatchQueue.main.async {
                         self.movieTableView.reloadData()
                     }
@@ -85,13 +98,16 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
 
             let rating = movieViewModel.movie.voteAverage ?? 0
             cell.movieRating.text = String(describing: rating)
-            cell.addButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
-            cell.addButton.setImage(UIImage(systemName: "questionmark"), for: .normal)
-
             
+            if let isWatched = movieViewModel.movie.isWatched {
             
+                if isWatched {
+                    cell.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+                } else {
+                    cell.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+                }
+            }
         }
-        
         return cell
 
     }
@@ -101,7 +117,7 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
         
         if editingStyle == .delete {
             
-            CoreService().deleteItem(with: movieIdList[indexPath.row])
+            CoreService().deleteItem(with: watchList[indexPath.row])
             CoreService().saveToCoreData()
             fetchWatchList()
             tableView.reloadData()
@@ -113,19 +129,6 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
         performSegue(withIdentifier: "toMovieDetailVC", sender: indexPath)
 
     }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                
-        if segue.identifier == "toMovieDetailVC" {
-
-            let vc = segue.destination as! MovieDetailVC
-            let indexPath = sender as! IndexPath
-            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
-
-        }
-    }
-    
     
 }
 

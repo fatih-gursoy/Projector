@@ -75,7 +75,7 @@ class MainViewController: UIViewController {
             let vc = segue.destination as! MovieDetailVC
             let indexPath = sender as! IndexPath
                         
-            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
+            vc.movieId = moviesViewModel?.movieAtIndex(indexPath.row).id
 
         }
     }
@@ -292,7 +292,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
                 
             moviesCollectionView.reloadData()
-            
             collectionView.reloadData()
         }
     }

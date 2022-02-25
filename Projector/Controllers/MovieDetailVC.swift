@@ -20,10 +20,13 @@ class MovieDetailVC: UIViewController {
     @IBOutlet weak var runTimeLabel: UILabel!
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var moreButton: UIButton!
+    @IBOutlet weak var bookmarkButton: UIButton!
+    @IBOutlet weak var watchButton: UIButton!
     
     @IBOutlet weak var genreCollectionView: UICollectionView!
     @IBOutlet weak var castCollectionView: UICollectionView!
     
+    var movieId: String?
     var movieViewModel: MovieViewModel?
     var creditsViewModel: CreditsViewModel?
     
@@ -43,8 +46,6 @@ class MovieDetailVC: UIViewController {
         fetchData()
         
     }
-    
-    
     
     override func viewDidLayoutSubviews() {
         
@@ -66,31 +67,43 @@ class MovieDetailVC: UIViewController {
     
     
     func fetchData() {
-        
-        guard let movieViewModel = movieViewModel else {return}
-        
-        if let photoURL = movieViewModel.backdropURL {
-            movieImage.sd_setImage(with: URL(string: API.backdropBaseURL+photoURL))
-        }
-        
-        overviewText.text = movieViewModel.movie.overview
-        movieNameLabel.text = movieViewModel.MovieTitle
-        ratingLabel.text = "\(movieViewModel.rating)"
-        yearLabel.text = movieViewModel.year
-        voteCountLabel.text = "\(movieViewModel.voteCount) votes"
-        
-        guard let movieId = movieViewModel.id else {return}
+                
+        guard let movieId = movieId else {return}
 
         WebService().downloadMovieDetail(movieId: movieId ) { movie in
             
-            guard let movie = movie else {return}
-            self.movieViewModel = MovieViewModel(movie: movie)
-            guard let movieViewModel = self.movieViewModel else {return}
-            
-            DispatchQueue.main.async {
-                self.genreCollectionView.reloadData()
-                self.runTimeLabel.text = "\(movieViewModel.runTime) min"
+            if let movie = movie {
+                
+                self.movieViewModel = MovieViewModel(movie: movie)
+                self.movieViewModel?.updateWatchStatus()
+                
+                guard let movieViewModel = self.movieViewModel else {return}
+                
+                self.overviewText.text = movieViewModel.movie.overview
+                self.movieNameLabel.text = movieViewModel.MovieTitle
+                self.ratingLabel.text = "\(movieViewModel.rating)"
+                self.yearLabel.text = movieViewModel.year
+                self.voteCountLabel.text = "\(movieViewModel.voteCount) votes"
+        
+                if let photoURL = movieViewModel.backdropURL {
+                    self.movieImage.sd_setImage(with: URL(string: API.backdropBaseURL+photoURL))
+                }
+                
+                if let isWatched = movieViewModel.movie.isWatched {
 
+                    DispatchQueue.main.async {
+                        
+                        self.bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+                        
+                            if isWatched {
+                                self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+                            } else if !isWatched {
+                                self.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+                            }
+                        self.genreCollectionView.reloadData()
+                        self.runTimeLabel.text = "\(movieViewModel.runTime) min"
+                    }
+                }
             }
         }
         
@@ -104,11 +117,35 @@ class MovieDetailVC: UIViewController {
         }
     }
     
-    
-    
-    @IBAction func addButtonClicked(_ sender: Any) {
+    @IBAction func watchButtonClicked(_ sender: Any) {
 
-        let items = CoreService().fetchWatchList()
+        self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        
+        addToWatchList()
+        setButtonImage()
+        movieViewModel?.updateWatchStatus()
+    
+    }
+    
+    @IBAction func bookmarkButtonClicked(_ sender: Any) {
+        
+        if let movieId = movieViewModel?.id {
+            
+            guard let movie = CoreService().fetchMovie(movieId) else {
+                return addToWatchList()
+            }
+            CoreService().deleteItem(with: movie)
+            bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+
+        }
+    }
+    
+    
+    func addToWatchList() {
+        
+        bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+
+        let items = CoreService().fetchData()
         let context = CoreDataModel.context
         
         if items.count < 1 {
@@ -116,6 +153,8 @@ class MovieDetailVC: UIViewController {
             let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
             
             newMovie.setValue(movieViewModel?.id, forKey:"movieId")
+            newMovie.setValue(false, forKey: "isWatched")
+            makeAlert(titleString: "Added to Watch List", messageString: "")
             
         } else {
             
@@ -123,27 +162,34 @@ class MovieDetailVC: UIViewController {
                 let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
                 
                 newMovie.setValue(movieViewModel?.id, forKey:"movieId")
-            } else {
-                makeAlert(titleString: "The movie exists in Watch List", messageString: "")
+                newMovie.setValue(false, forKey: "isWatched")
+                makeAlert(titleString: "Added to Watch List", messageString: "")
             }
         }
         
-        do {
-           try context.save()
-            
-            makeAlert(titleString: "Added to Watch List", messageString: "")
-            
-        } catch {
-            print(error.localizedDescription)
-        }
+        CoreService().saveToCoreData()
     }
     
-    
+    func setButtonImage() {
+              
+        let items = CoreService().fetchData()
+        let movie = items.filter { $0.movieId == movieViewModel?.id }
+        guard let item = movie.first else {return}
+        
+        item.isWatched = !(item.isWatched)
+        
+        DispatchQueue.main.async {
+            if item.isWatched {
+                self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+            } else {
+                self.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            }
+        }
+    }
     
     @IBAction func moreLikeButtonClicked(_ sender: Any) {
         
         performSegue(withIdentifier: "toMoreLikeVC", sender: nil)
-        
         
     }
     
@@ -152,7 +198,6 @@ class MovieDetailVC: UIViewController {
         if segue.identifier == "toMoreLikeVC" {
             let vc = segue.destination as! MoreMoviesVC
             vc.movieId = movieViewModel?.id
-            
             
         }
     }

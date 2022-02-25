@@ -60,7 +60,7 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" cornerStyle="large">
-                                    <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                                    <imageReference key="image" image="eye.fill" catalog="system" symbolScale="large"/>
                                     <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" configurationType="pointSize" pointSize="20" scale="default" weight="bold"/>
                                     <color key="baseBackgroundColor" systemColor="systemGreenColor"/>
                                 </buttonConfiguration>
@@ -83,16 +83,16 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="addButton" destination="flM-FI-g3V" id="uiA-Ug-Ck4"/>
                 <outlet property="movieImage" destination="7D2-2L-ifc" id="14a-OK-76S"/>
                 <outlet property="movieRating" destination="9sb-Gq-Erg" id="5UU-8H-at8"/>
                 <outlet property="movieTitle" destination="bWR-fH-Wwb" id="aex-Xw-Gzd"/>
+                <outlet property="watchButton" destination="flM-FI-g3V" id="IUc-XO-Aze"/>
             </connections>
             <point key="canvasLocation" x="155.07246376811597" y="127.56696428571428"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="eye.fill" catalog="system" width="128" height="78"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -39,7 +39,6 @@ class WebService {
 
             completion(movie)
         }
-        
     }
     
     func downloadGenres(completion: @escaping (GenreList?) -> ()) {

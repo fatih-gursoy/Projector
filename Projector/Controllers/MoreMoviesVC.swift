@@ -58,7 +58,7 @@ extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
         if let movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row) {
             
             cell.movieTitle.text = movieViewModel.MovieTitle
-            cell.addButton.isHidden = true
+            cell.watchButton.isHidden = true
 
             if let posterPath = movieViewModel.movie.posterPath {
 
@@ -86,8 +86,7 @@ extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
             
             let vc = segue.destination as! MovieDetailVC
             let indexPath = sender as! IndexPath
-            
-            vc.movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row)
+            vc.movieId = moviesViewModel?.movieAtIndex(indexPath.row).id
 
         }
     }

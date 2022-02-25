@@ -57,7 +57,7 @@ struct MoviesViewModel {
 
 struct MovieViewModel {
     
-    let movie: Movie
+    var movie: Movie
     
     var MovieTitle: String? {
         return movie.title
@@ -106,6 +106,16 @@ struct MovieViewModel {
         dt.dateFormat = "yyyy"
         let year = dt.string(from: releaseDate)
         return year
+    }
+    
+    mutating func updateWatchStatus() {
+        
+        let items = CoreService().fetchData()
+        let item = items.filter { $0.movieId == self.id }
+        
+        if item.count > 0 {
+            movie.isWatched = item[0].isWatched
+        }
     }
     
 }

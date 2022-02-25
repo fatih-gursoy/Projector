@@ -12,7 +12,7 @@ class MovieTableCell: UITableViewCell {
     @IBOutlet weak var movieImage: UIImageView!
     @IBOutlet weak var movieTitle: UILabel!
     @IBOutlet weak var movieRating: UILabel!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var watchButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,7 +27,6 @@ class MovieTableCell: UITableViewCell {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
         self.addGestureRecognizer(tap)
         tap.cancelsTouchesInView = false
-        
         
     }
 
