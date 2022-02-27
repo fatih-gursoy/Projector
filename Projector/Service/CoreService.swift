@@ -26,6 +26,13 @@ class CoreService {
         return requests
     }
     
+    var watchList: [WatchList] {
+        
+        let items = fetchData()
+        return items
+        
+    }
+    
     func fetchMovie(_ movieId: String) -> WatchList? {
         
         var requests = [WatchList]()
@@ -55,6 +62,7 @@ class CoreService {
     func deleteItem(with item: NSManagedObject) {
         
         context.delete(item)
+        saveToCoreData()
     }
 
 }

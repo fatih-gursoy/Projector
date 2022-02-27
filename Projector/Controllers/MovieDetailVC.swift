@@ -26,6 +26,11 @@ class MovieDetailVC: UIViewController {
     @IBOutlet weak var genreCollectionView: UICollectionView!
     @IBOutlet weak var castCollectionView: UICollectionView!
     
+    let notificationCenter: NotificationCenter = NotificationCenter.default
+    
+    var CoreDataService = CoreService()
+    var watchList = [WatchList]()
+
     var movieId: String?
     var movieViewModel: MovieViewModel?
     var creditsViewModel: CreditsViewModel?
@@ -120,35 +125,35 @@ class MovieDetailVC: UIViewController {
     @IBAction func watchButtonClicked(_ sender: Any) {
 
         self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
-        
         addToWatchList()
         setButtonImage()
-        movieViewModel?.updateWatchStatus()
-    
+
+        notificationCenter.post(name: NSNotification.Name(rawValue: "UpdateWatchList"), object: nil)
+        
     }
     
     @IBAction func bookmarkButtonClicked(_ sender: Any) {
         
         if let movieId = movieViewModel?.id {
-            
-            guard let movie = CoreService().fetchMovie(movieId) else {
-                return addToWatchList()
+        
+            if let movie = CoreDataService.fetchMovie(movieId)  {
+                CoreDataService.deleteItem(with: movie)
+                bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
+            } else {
+                addToWatchList()
             }
-            CoreService().deleteItem(with: movie)
-            bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
-
         }
+        notificationCenter.post(name: NSNotification.Name(rawValue: "UpdateWatchList"), object: nil)
     }
     
-    
     func addToWatchList() {
-        
+
         bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
 
-        let items = CoreService().fetchData()
         let context = CoreDataModel.context
+        watchList = CoreDataService.watchList
         
-        if items.count < 1 {
+        if watchList.count < 1 {
             
             let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
             
@@ -158,7 +163,7 @@ class MovieDetailVC: UIViewController {
             
         } else {
             
-            if !(items.contains(where: { $0.movieId == movieViewModel?.id})) {
+            if !(watchList.contains(where: { $0.movieId == movieViewModel?.id})) {
                 let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
                 
                 newMovie.setValue(movieViewModel?.id, forKey:"movieId")
@@ -166,20 +171,20 @@ class MovieDetailVC: UIViewController {
                 makeAlert(titleString: "Added to Watch List", messageString: "")
             }
         }
-        
-        CoreService().saveToCoreData()
+        CoreDataService.saveToCoreData()
     }
     
     func setButtonImage() {
               
-        let items = CoreService().fetchData()
-        let movie = items.filter { $0.movieId == movieViewModel?.id }
-        guard let item = movie.first else {return}
+        watchList = CoreDataService.watchList
+        let movie = watchList.filter { $0.movieId == movieViewModel?.id }
+        guard let movie = movie.first else {return}
         
-        item.isWatched = !(item.isWatched)
-        
+        movie.isWatched = !(movie.isWatched)
+        movieViewModel?.updateWatchStatus()
+
         DispatchQueue.main.async {
-            if item.isWatched {
+            if movie.isWatched {
                 self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
             } else {
                 self.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
@@ -284,5 +289,5 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, U
     }
     
     
-    
 }
+

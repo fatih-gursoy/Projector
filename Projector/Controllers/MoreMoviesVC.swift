@@ -80,6 +80,7 @@ extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
         performSegue(withIdentifier: "toMovieDetailVC", sender: indexPath)
     }
     
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
                 
         if segue.identifier == "toMovieDetailVC"  {
@@ -90,8 +91,6 @@ extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
 
         }
     }
-    
-    
     
     
     

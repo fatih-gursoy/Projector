@@ -13,8 +13,10 @@ class WatchListVC: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var movieTableView: UITableView!
     
-    private var moviesViewModel: MoviesViewModel?
+    var CoreDataService = CoreService()
     var watchList = [WatchList]()
+
+    private var moviesViewModel: MoviesViewModel?
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,14 +28,12 @@ class WatchListVC: UIViewController {
         hideKeyboard()
         
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
-     
+        
+        let notificationCenter: NotificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(updateUI), name: NSNotification.Name("UpdateWatchList") , object: nil)
+
         fetchWatchList()
 
-    }
-    
-   
-    override func viewWillAppear(_ animated: Bool) {
-        fetchWatchList()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -49,9 +49,9 @@ class WatchListVC: UIViewController {
     
     func fetchWatchList() {
 
-        watchList = CoreService().fetchData()
         moviesViewModel = MoviesViewModel(movieList: [])
-        
+        watchList = CoreService().watchList
+
         for item in watchList {
             
             if let movieId = item.movieId {
@@ -61,7 +61,6 @@ class WatchListVC: UIViewController {
                     
                     var movieViewModel = MovieViewModel(movie: movie)
                     movieViewModel.updateWatchStatus()
-                    
                     self.moviesViewModel?.addMovie(movie: movieViewModel.movie)
 
                     DispatchQueue.main.async {
@@ -70,6 +69,13 @@ class WatchListVC: UIViewController {
                 }
             }
         }
+        movieTableView.reloadData()
+    }
+    
+    @objc func updateUI() {
+        
+        fetchWatchList()
+        
     }
 
 }
@@ -116,10 +122,8 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            
-            CoreService().deleteItem(with: watchList[indexPath.row])
-            CoreService().saveToCoreData()
-            fetchWatchList()
+            CoreDataService.deleteItem(with: watchList[indexPath.row])
+            moviesViewModel?.movieList.remove(at: indexPath.row)
             tableView.reloadData()
         }
     }
@@ -142,7 +146,6 @@ extension WatchListVC: UISearchBarDelegate {
             if filtered.count > 0 {
             moviesViewModel = MoviesViewModel(movieList: filtered)
             } else {
-                
                 fetchWatchList()
             }
         }
