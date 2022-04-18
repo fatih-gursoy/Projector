@@ -9,16 +9,37 @@ import UIKit
 
 class GenreCell: UICollectionViewCell {
 
-    @IBOutlet weak var genreLabel: UILabel!
-    @IBOutlet weak var backView: UIView!
+    @IBOutlet private weak var genreLabel: UILabel!
+    @IBOutlet private weak var backView: UIView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    func configure(viewModel: GenreViewModel?) {
         
-        backView.layer.borderWidth = 1.0
-        backView.layer.borderColor = UIColor.lightGray.cgColor
-        backView.layer.cornerRadius = 15.0
+        if let genre = viewModel {
+
+            genreLabel.text = genre.genreTitle
+
+//            if genre.isSelected == false || genre.isSelected == nil {
+//                backView.backgroundColor = .clear
+//                genreLabel.textColor = .black
+//            } else if genre.isSelected == true {
+//                backView.backgroundColor = .darkGray
+//                genreLabel.textColor = .white
+//            }
+        }
+    }
+    
+    func didSelect(_ index:Int) {
+        
+        backView.backgroundColor = .clear
+        genreLabel.textColor = .black
+        
+    }
+    
+    func didDeselect(_ index:Int) {
+        
+        backView.backgroundColor = .darkGray
+        genreLabel.textColor = .white
+        
     }
 
 }

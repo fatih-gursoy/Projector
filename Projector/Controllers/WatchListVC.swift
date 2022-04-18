@@ -10,13 +10,13 @@ import CoreData
 
 class WatchListVC: UIViewController {
 
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var movieTableView: UITableView!
+    @IBOutlet private weak var searchBar: UISearchBar!
+    @IBOutlet private weak var movieTableView: UITableView!
     
     var CoreDataService = CoreService()
     var watchList = [WatchList]()
 
-    private var moviesViewModel: MoviesViewModel?
+    private var moviesViewModel = MoviesViewModel()
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,37 +36,30 @@ class WatchListVC: UIViewController {
 
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                
-        if segue.identifier == "toMovieDetailVC" {
-
-            let vc = segue.destination as! MovieDetailVC
-            let indexPath = sender as! IndexPath
-            vc.movieId = moviesViewModel?.movieAtIndex(indexPath.row).id
-
-        }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
+    
     
     func fetchWatchList() {
 
-        moviesViewModel = MoviesViewModel(movieList: [])
         watchList = CoreService().watchList
 
         for item in watchList {
             
             if let movieId = item.movieId {
                 
-                WebService().downloadMovieDetail(movieId: movieId) { movie in
-                    guard let movie = movie else {return}
-                    
-                    var movieViewModel = MovieViewModel(movie: movie)
-                    movieViewModel.updateWatchStatus()
-                    self.moviesViewModel?.addMovie(movie: movieViewModel.movie)
-
-                    DispatchQueue.main.async {
-                        self.movieTableView.reloadData()
-                    }
-                }
+//                WebService().downloadMovieDetail(movieId: movieId) { movie in
+//                    guard let movie = movie else {return}
+//                    
+//                    var movieViewModel = MovieViewModel(movie: movie)
+//                    movieViewModel.updateWatchStatus()
+//                    self.moviesViewModel?.addMovie(movie: movieViewModel.movie)
+//
+//                    DispatchQueue.main.async {
+//                        self.movieTableView.reloadData()
+//                    }
+//                }
             }
         }
         movieTableView.reloadData()
@@ -84,7 +77,7 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        guard let count = moviesViewModel?.count else {return 0}
+        let count = moviesViewModel.count
         return count
         
     }
@@ -92,30 +85,12 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableCell", for: indexPath) as! MovieTableCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableCell", for: indexPath) as? MovieTableCell else { fatalError("Could not load") }
+            
+        let movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
+        cell.configure(viewModel: movieViewModel)
         
-        if let movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row) {
-            
-            cell.movieTitle.text = movieViewModel.MovieTitle
-            if let posterPath = movieViewModel.movie.posterPath {
-
-                cell.movieImage.sd_setImage(with: URL(string: API.ImageBaseURL+posterPath))
-            }
-
-            let rating = movieViewModel.movie.voteAverage ?? 0
-            cell.movieRating.text = String(describing: rating)
-            
-            if let isWatched = movieViewModel.movie.isWatched {
-            
-                if isWatched {
-                    cell.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
-                } else {
-                    cell.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-                }
-            }
-        }
         return cell
-
     }
     
     
@@ -123,7 +98,7 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
         
         if editingStyle == .delete {
             CoreDataService.deleteItem(with: watchList[indexPath.row])
-            moviesViewModel?.movieList.remove(at: indexPath.row)
+            moviesViewModel.movieList.remove(at: indexPath.row)
             tableView.reloadData()
         }
     }
@@ -141,14 +116,14 @@ extension WatchListVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        if let filtered = moviesViewModel?.movieList.filter({ ($0.title?.contains(searchText) == true)}) {
+        let filtered = moviesViewModel.movieList.filter({ ($0.title?.contains(searchText) == true)})
     
-            if filtered.count > 0 {
-            moviesViewModel = MoviesViewModel(movieList: filtered)
-            } else {
-                fetchWatchList()
-            }
+        if filtered.count > 0 {
+//        moviesViewModel = MoviesViewModel(movieList: filtered)
+        } else {
+            fetchWatchList()
         }
+        
         movieTableView.reloadData()
     }
     

@@ -15,14 +15,8 @@ class CoreService {
  
     func fetchData() -> [WatchList] {
 
-        var requests = [WatchList]()
+        guard let requests = try? context.fetch(fetchRequest) else { return [] }
         
-        do {
-            requests = try context.fetch(fetchRequest)
-            return requests
-        } catch {
-            print(error.localizedDescription)
-        }
         return requests
     }
     
@@ -34,19 +28,12 @@ class CoreService {
     }
     
     func fetchMovie(_ movieId: String) -> WatchList? {
+                
+        guard let request = try? context.fetch(fetchRequest) else { return WatchList() }
         
-        var requests = [WatchList]()
-        
-        do {
-            requests = try context.fetch(fetchRequest)
-            let movie = requests.filter { $0.movieId == movieId }
-            return movie.first
-            
-        } catch {
-            print(error.localizedDescription)
-        }
+        let movie = request.filter { $0.movieId == movieId }
+        return movie.first
 
-        return WatchList()
     }
     
     func saveToCoreData() {

@@ -9,26 +9,22 @@ import UIKit
 
 class MovieCell: UICollectionViewCell {
     
-    @IBOutlet weak var movieImageView: UIImageView!
-    @IBOutlet weak var movieTitleLabel: UILabel!
-    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet private weak var movieImageView: UIImageView!
+    @IBOutlet private weak var movieTitleLabel: UILabel!
+    @IBOutlet private weak var ratingLabel: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+
+    func configure(viewModel: MovieViewModel?) {
         
-        movieTitleLabel.font = UIFont.boldSystemFont(ofSize: 20.0)
+        if let movie = viewModel {
+
+            movieTitleLabel.text = movie.movieTitle
+
+            if let posterPath = movie.photoURL {
+                movieImageView.setImage(url: posterPath)
+            }
+            ratingLabel.text = String(describing: movie.rating)
+        }
     }
     
-    override func layoutSubviews() {
-
-        self.layer.shadowColor = UIColor.darkGray.cgColor
-        self.layer.shadowOffset = CGSize(width: 20, height: 20)
-        self.layer.shadowRadius = 10.0
-        self.layer.shadowOpacity = 0.5
-        self.layer.masksToBounds = false
-        
-    }
-
-
 }

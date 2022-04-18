@@ -9,31 +9,25 @@ import UIKit
 
 class MovieTableCell: UITableViewCell {
 
-    @IBOutlet weak var movieImage: UIImageView!
-    @IBOutlet weak var movieTitle: UILabel!
-    @IBOutlet weak var movieRating: UILabel!
-    @IBOutlet weak var watchButton: UIButton!
+    @IBOutlet private weak var movieImage: UIImageView!
+    @IBOutlet private weak var movieTitle: UILabel!
+    @IBOutlet private weak var movieRating: UILabel!
+    @IBOutlet private weak var watchButton: UIButton!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    func configure(viewModel: MovieViewModel?) {
         
-        movieImage.layer.shadowColor = UIColor.darkGray.cgColor
-        movieImage.layer.shadowOffset = CGSize(width: 20, height: 20)
-        movieImage.layer.shadowRadius = 10.0
-        movieImage.layer.shadowOpacity = 0.5
-        movieImage.layer.masksToBounds = true
-        movieImage.layer.cornerRadius = 10.0
+        self.movieTitle.text = viewModel?.movieTitle ?? ""
+        self.movieRating.text = (String(describing: viewModel?.rating))
+        self.movieImage.setImage(url: viewModel?.photoURL)
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: nil)
-        self.addGestureRecognizer(tap)
-        tap.cancelsTouchesInView = false
+        if let isWatched = viewModel?.isWatched {
+
+            if isWatched {
+                watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+            } else {
+                watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            }
+        }
         
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
 }

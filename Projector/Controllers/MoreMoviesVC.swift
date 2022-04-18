@@ -9,9 +9,9 @@ import UIKit
 
 class MoreMoviesVC: UIViewController {
 
-    @IBOutlet weak var movieTableView: UITableView!
+    @IBOutlet private weak var movieTableView: UITableView!
     
-    private var moviesViewModel: MoviesViewModel?
+    private var moviesViewModel = MoviesViewModel()
     var movieId: String?
     
     override func viewDidLoad() {
@@ -27,17 +27,17 @@ class MoreMoviesVC: UIViewController {
     
     
     func fetchMovies() {
-        
-        WebService().downloadSimilarMovies(movieId: movieId!) { movies in
-            
-            guard let movies = movies?.results else {return}
-            
-            self.moviesViewModel = MoviesViewModel(movieList: movies)
-            
-            DispatchQueue.main.async {
-                self.movieTableView.reloadData()
-            }
-        }
+                
+//        WebService().downloadSimilarMovies(movieId: movieId!) { movies in
+//
+//            guard let movies = movies?.results else {return}
+//
+//            self.moviesViewModel = MoviesViewModel(movieList: movies)
+//
+//            DispatchQueue.main.async {
+//                self.movieTableView.reloadData()
+//            }
+//        }
     }
 
 
@@ -47,29 +47,32 @@ extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        guard let count = moviesViewModel?.count else {return 0}
+        let count = moviesViewModel.count
         return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableCell", for: indexPath) as? MovieTableCell else { fatalError("Could not load") }
         
-        let cell = movieTableView.dequeueReusableCell(withIdentifier: "MovieTableCell", for: indexPath) as! MovieTableCell
+        let movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
         
-        if let movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row) {
+        cell.configure(viewModel: movieViewModel)
+        
             
-            cell.movieTitle.text = movieViewModel.MovieTitle
-            cell.watchButton.isHidden = true
+//            cell.movieTitle.text = movieViewModel.MovieTitle
+//            cell.watchButton.isHidden = true
+//
+//            if let posterPath = movieViewModel.movie.posterPath {
+//
+//                cell.movieImage.sd_setImage(with: URL(string: API.ImageBaseURL+posterPath))
+//            }
+//
+//            let rating = movieViewModel.movie.voteAverage ?? 0
+//            cell.movieRating.text = String(describing: rating)
+//            cell.accessoryType = .detailDisclosureButton
 
-            if let posterPath = movieViewModel.movie.posterPath {
-
-                cell.movieImage.sd_setImage(with: URL(string: API.ImageBaseURL+posterPath))
-            }
-
-            let rating = movieViewModel.movie.voteAverage ?? 0
-            cell.movieRating.text = String(describing: rating)
-            cell.accessoryType = .detailDisclosureButton
-
-        }
+        
         
         return cell
     }
@@ -78,19 +81,13 @@ extension MoreMoviesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         performSegue(withIdentifier: "toMovieDetailVC", sender: indexPath)
+        
+        let movieDetailVC = MovieDetailVC()
+        self.navigationController?.pushViewController(movieDetailVC, animated: true)
+        movieDetailVC.movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
     }
     
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                
-        if segue.identifier == "toMovieDetailVC"  {
-            
-            let vc = segue.destination as! MovieDetailVC
-            let indexPath = sender as! IndexPath
-            vc.movieId = moviesViewModel?.movieAtIndex(indexPath.row).id
 
-        }
-    }
     
     
     

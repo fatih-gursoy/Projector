@@ -9,9 +9,9 @@ import Foundation
 
 struct MovieList: Codable {
     
-    var page: Int?
-    var results: [Movie]
-    var total_results: Int?
-    var total_pages: Int?
+    let page: Int?
+    let results: [Movie]
+    let total_results: Int?
+    let total_pages: Int?
     
 }

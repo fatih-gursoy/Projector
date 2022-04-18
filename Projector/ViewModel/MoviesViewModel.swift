@@ -6,11 +6,23 @@
 //
 
 import Foundation
-import Alamofire
 
-struct MoviesViewModel {
+protocol MoviesViewModelDelegate: AnyObject {
     
-    var movieList: [Movie]
+    func updateMoviesView()
+    
+}
+
+class MoviesViewModel {
+    
+    var movieList: [Movie] = []
+    
+    private let service: NetworkManagerProtocol
+    weak var delegate: MoviesViewModelDelegate?
+    
+    init(service: NetworkManager = NetworkManager.shared) {
+        self.service = service
+    }
     
     var count : Int {
         return movieList.count
@@ -23,7 +35,21 @@ struct MoviesViewModel {
         
     }
     
-    mutating func addMovie(movie: Movie) {
+    func fetchMovies(from endPoint: MoviesEndPoint) {
+        
+        service.fetch(endpoint: endPoint, model: MovieList.self) {
+            [weak self] movies in
+            
+            guard let movies = movies else { return }
+            self?.movieList = movies.results
+            
+            DispatchQueue.main.async {
+                self?.delegate?.updateMoviesView()
+            }
+        }
+    }
+    
+    func addMovie(movie: Movie) {
 
         movieList.append(movie)
 
@@ -31,16 +57,15 @@ struct MoviesViewModel {
     
     var movieIdList: [String?] {
         
-        let Ids = movieList.map { movie in
-           String(describing: movie.id)
-        }
-        return Ids
+        let IdList = movieList.map { String(describing: $0.id) }
+        return IdList
+    
     }
     
     func filterByGenre(_ selectedGenres: [Genre]) -> [Movie] {
         
         var filteredMovies = [Movie]()
-        
+                
         for movie in movieList {
             
             for genre in selectedGenres {
@@ -55,84 +80,6 @@ struct MoviesViewModel {
 
 }
 
-struct MovieViewModel {
-    
-    var movie: Movie
-    
-    var MovieTitle: String? {
-        return movie.title
-    }
-    
-    var id: String? {
-        
-        guard let id = movie.id else {return ""}
-        return String(describing: id)
-    }
-    
-    var photoURL: String? {
-        
-        return movie.posterPath
-    }
-    
-    var backdropURL: String? {
-        
-        return movie.backdropPath
-    }
-    
-    var rating: Double {
-        
-        guard let rating = movie.voteAverage else {return 0.0}
-        return rating
-    }
-    
-    var voteCount: Int {
-        
-        guard let voteCount = movie.voteCount else {return 0}
-        return voteCount
-    }
-    
-    var runTime: Int {
-        
-        guard let runTime = movie.runtime else {return 0}
-        return runTime
-    }
-    
-    var year: String {
-        
-        let dt = DateFormatter()
-        dt.dateFormat = "yyyy-MM-dd"
-        guard let releaseDate = dt.date(from: movie.releaseDate ?? "") else {return  ""}
-        
-        dt.dateFormat = "yyyy"
-        let year = dt.string(from: releaseDate)
-        return year
-    }
-    
-    mutating func updateWatchStatus() {
-        
-        let items = CoreService().fetchData()
-        let item = items.filter { $0.movieId == self.id }
-        
-        if item.count > 0 {
-            movie.isWatched = item[0].isWatched
-        }
-    }
-    
-}
 
-struct GenreViewModel {
-    
-    var genreList: [Genre]?
-    
-    mutating func selectGenreAtIndex(_ index:Int) {
-        
-        if let selection = self.genreList?[index].isSelected {
-            self.genreList?[index].isSelected = !selection
-        } else {
-            self.genreList?[index].isSelected = true
-        }
-    }
-    
-}
 
 

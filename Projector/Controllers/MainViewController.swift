@@ -1,20 +1,45 @@
 
 import UIKit
-import SDWebImage
 import AnimatedCollectionViewLayout
-import Alamofire
 
 class MainViewController: UIViewController {
     
-    @IBOutlet weak var headerCollectionView: UICollectionView!
-    @IBOutlet weak var genreCollectionView: UICollectionView!
-    @IBOutlet weak var moviesCollectionView: UICollectionView!
+    @IBOutlet private weak var headerCollectionView: UICollectionView!
+    @IBOutlet private weak var genreCollectionView: UICollectionView!
+    @IBOutlet private weak var moviesCollectionView: UICollectionView!
     
-    private var moviesViewModel: MoviesViewModel?
-    private var genreViewModel: GenreViewModel?
-        
+    private var moviesViewModel = MoviesViewModel()
+    private var genresViewModel = GenresViewModel()
+            
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        configureNavBar()
+        configureCollectionView()
+        
+        fetchMovieList(endpoint: .nowPlaying)
+        fetchGenres()
+        
+    }
+    
+    @objc func toSearchVC() {
+        
+        let searchVC = SearchViewController()
+        self.navigationController?.pushViewController(searchVC, animated: true)
+
+    }
+    
+    func configureNavBar() {
+        
+        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(toSearchVC))
+        
+        let logo = UIImage(named: "logo")
+        let imageView = UIImageView(image: logo)
+        self.navigationItem.titleView = imageView
+        
+    }
+    
+    func configureCollectionView() {
         
         headerCollectionView.delegate = self
         genreCollectionView.delegate = self
@@ -30,88 +55,53 @@ class MainViewController: UIViewController {
         genreCollectionView.register(UINib(nibName: "GenreCellView", bundle: nil), forCellWithReuseIdentifier: "GenreCell")
         moviesCollectionView.register(UINib(nibName: "MovieCellView", bundle: nil), forCellWithReuseIdentifier: "MovieCell")
         
-        navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(toSearchVC))
+        // Movie Collection Animation
         
-        let logo = UIImage(named: "logo")
-        let imageView = UIImageView(image: logo)
-        self.navigationItem.titleView = imageView
+        let layout = AnimatedCollectionViewLayout()
+        layout.animator = LinearCardAttributesAnimator()
+        layout.scrollDirection = .horizontal
+        moviesCollectionView.collectionViewLayout = layout
         
-        fetchMovieList(listName: Header.nowPlaying.rawValue)
-        fetchGenres()
-        collectionViewAnimate()
-   
     }
     
-    @objc func toSearchVC() {
+    func fetchMovieList(endpoint: MoviesEndPoint) {
         
-        performSegue(withIdentifier: "toSearchVC", sender: nil)
+        moviesViewModel.delegate = self
+        moviesViewModel.fetchMovies(from: endpoint)
+        
+    }
+
+    func fetchGenres() {
+        
+        genresViewModel.delegate = self
+        genresViewModel.fetchGenres()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
         let indexPath = IndexPath(row: 0, section: 0)
+        
         headerCollectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         
-        let cell = headerCollectionView.cellForItem(at: indexPath) as! HeaderCell
-        cell.headerLabel.textColor = .black
-        cell.headerLabel.font = .boldSystemFont(ofSize: 20)
-  
-    }
+        // İlk değer default seçili yapılacak ??
     
-    func collectionViewAnimate() {
-        
-        let layout = AnimatedCollectionViewLayout()
-        layout.animator = LinearCardAttributesAnimator()
-        layout.scrollDirection = .horizontal
-        
-        moviesCollectionView.collectionViewLayout = layout
-        
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-                
-        if segue.identifier == "toMovieDetail"  {
-            
-            let vc = segue.destination as! MovieDetailVC
-            let indexPath = sender as! IndexPath
-                        
-            vc.movieId = moviesViewModel?.movieAtIndex(indexPath.row).id
-
-        }
-    }
-
-    
-    func fetchMovieList(listName: String) {
-        
-        WebService().downloadMovies(listName: listName) { movies in
-            
-            guard let movies = movies?.results else {return}
-            
-            self.moviesViewModel = MoviesViewModel(movieList: movies)
-            
-            DispatchQueue.main.async {
-                self.moviesCollectionView.reloadData()
-            }
-        }
-    }
-    
-    
-    func fetchGenres() {
-        
-        WebService().downloadGenres { genreList in
-            guard let genreList = genreList else {return}
-            
-            self.genreViewModel = GenreViewModel(genreList: genreList.genres)
-
-            DispatchQueue.main.async {
-                self.genreCollectionView.reloadData()
-            }
-        }
     }
     
     
 }
 
+extension MainViewController: MoviesViewModelDelegate, GenresViewModelDelegate {
+    
+    func updateMoviesView() {
+        self.moviesCollectionView.reloadData()
+    }
+    
+    func updateGenreView() {
+        self.genreCollectionView.reloadData()
+    }
+    
+}
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -121,16 +111,16 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         case headerCollectionView:
             
-            return Header.allCases.count
+            return MoviesEndPoint.allCases.count
             
         case genreCollectionView:
             
-            guard let count = genreViewModel?.genreList?.count else {return 0}
+            let count = genresViewModel.genreList.count
             return count
             
         case moviesCollectionView:
             
-            guard let count = moviesViewModel?.movieList.count else {return 0}
+            let count = moviesViewModel.count
             return count
             
         default:
@@ -146,51 +136,26 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         case headerCollectionView:
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as! HeaderCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HeaderCell", for: indexPath) as? HeaderCell else { fatalError("Could not load") }
             
-            cell.headerLabel.text = Header.allCases[indexPath.row].headerTitle
+            cell.configure(MoviesEndPoint.allCases[indexPath.row].headerTitle)
             
             return cell
             
         case genreCollectionView:
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as! GenreCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCell", for: indexPath) as? GenreCell else { fatalError("Could not load") }
 
-            if let genre = genreViewModel?.genreList?[indexPath.row] {
-                
-                cell.genreLabel.text = genre.name
-
-                if genre.isSelected == false || genre.isSelected == nil {
-                    cell.backView.backgroundColor = .clear
-                    cell.genreLabel.textColor = .black
-                } else if genre.isSelected == true {
-                    cell.backView.backgroundColor = .darkGray
-                    cell.genreLabel.textColor = .white
-                }
-            }
+            cell.configure(viewModel: genresViewModel.genreAtIndex(indexPath.row))
         
             return cell
             
         case moviesCollectionView:
             
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
-
-            if let movieViewModel = moviesViewModel?.movieAtIndex(indexPath.row) {
-                
-                cell.movieTitleLabel.text = movieViewModel.MovieTitle
-
-                if let posterPath = movieViewModel.movie.posterPath {
-
-                    cell.movieImageView.sd_setImage(with: URL(string: API.ImageBaseURL+posterPath))
-                }
-
-                let rating = movieViewModel.movie.voteAverage ?? 0
-                cell.ratingLabel.text = String(describing: rating)
-                
-            }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as? MovieCell else { fatalError("Could not load") }
             
-            cellLayout(cell.movieImageView)
-            
+            cell.configure(viewModel: moviesViewModel.movieAtIndex(indexPath.row))
+                        
             return cell
             
         default:
@@ -206,7 +171,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
 
         case headerCollectionView:
             
-            let item = Header.allCases[indexPath.row].headerTitle
+            let item = MoviesEndPoint.allCases[indexPath.row].headerTitle
 
             let itemWidth = (item.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20)]).width) + 40
             
@@ -216,7 +181,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         case genreCollectionView:
             
-            let item = genreViewModel?.genreList?[indexPath.row].name
+            let item = genresViewModel.genreList[indexPath.row].name
 
             let itemWidth = (item?.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17)]).width)! + 40
             
@@ -241,54 +206,56 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        var headerIndex = Int()
-        
+                
         if collectionView == moviesCollectionView {
-            performSegue(withIdentifier: "toMovieDetail", sender: indexPath)
+                        
+            guard let movieDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailVC") as? MovieDetailVC else { fatalError("Error")}
+                    
+            movieDetailVC.movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
+            self.navigationController?.pushViewController(movieDetailVC, animated: true)
+
         }
         
         if collectionView == headerCollectionView {
             
-            let cell = collectionView.cellForItem(at: indexPath) as! HeaderCell
+            guard let cell = collectionView.cellForItem(at: indexPath) as? HeaderCell else { fatalError("Could not load") }
+            
+            cell.didSelect(indexPath.row)
+            fetchMovieList(endpoint: MoviesEndPoint.allCases[indexPath.row])
 
-            cell.headerLabel.textColor = .black
-            cell.headerLabel.font = .boldSystemFont(ofSize: 20)
-
-            headerIndex = indexPath.row
-            fetchMovieList(listName: Header.allCases[headerIndex].rawValue)
         }
         
         if collectionView == genreCollectionView {
             
-            let cell = collectionView.cellForItem(at: indexPath) as! GenreCell
+            guard let cell = collectionView.cellForItem(at: indexPath) as? GenreCell else { fatalError("Could not load") }
             
-            genreViewModel?.selectGenreAtIndex(indexPath.row)
+            cell.didSelect(indexPath.row)
 
-            cell.backView.backgroundColor = .darkGray
-            cell.genreLabel.textColor = .white
+            let selectedGenre = genresViewModel.genreAtIndex(indexPath.row)
+
+            cell.configure(viewModel: selectedGenre)
                         
-            var selectedGenres = [Genre]()
-            
-            if let indexPaths = collectionView.indexPathsForSelectedItems {
-                
-                for indexPath in indexPaths {
-                    
-                    if let genre = genreViewModel?.genreList?[indexPath.row] {
-                        if genre.isSelected == true {
-                            selectedGenres.append(genre)
-                        }
-                    }
-                }
-            }
-            
-            guard let filteredMovies = moviesViewModel?.filterByGenre(selectedGenres) else {return}
-            
-            if selectedGenres.count > 0 {
-                moviesViewModel = MoviesViewModel(movieList: filteredMovies)
-            } else {
-                fetchMovieList(listName: Header.allCases[headerIndex].rawValue)
-            }
+//            var selectedGenres = [Genre]()
+//
+//            if let indexPaths = collectionView.indexPathsForSelectedItems {
+//
+//                for indexPath in indexPaths {
+//
+//                    if let genre = genreViewModel?.genreList?[indexPath.row] {
+//                        if genre.isSelected == true {
+//                            selectedGenres.append(genre)
+//                        }
+//                    }
+//                }
+//            }
+//
+//            guard let filteredMovies = moviesViewModel?.filterByGenre(selectedGenres) else {return}
+//
+//            if selectedGenres.count > 0 {
+//                moviesViewModel = MoviesViewModel(movieList: filteredMovies)
+//            } else {
+//                fetchMovieList(listName: Header.allCases[headerIndex].rawValue)
+//            }
             
                 
             moviesCollectionView.reloadData()
@@ -301,22 +268,21 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         
         if collectionView == headerCollectionView {
             
-            let cell = collectionView.cellForItem(at: indexPath) as! HeaderCell
-            cell.headerLabel.textColor = .lightGray
-            cell.headerLabel.font = .systemFont(ofSize: 20)
+            guard let cell = collectionView.cellForItem(at: indexPath) as? HeaderCell else { fatalError("Could not load") }
+            
+            cell.didDeselect(indexPath.row)
             
         }
         
         if collectionView == genreCollectionView {
             
-            let cell = collectionView.cellForItem(at: indexPath) as! GenreCell
+            guard let cell = collectionView.cellForItem(at: indexPath) as? GenreCell else { fatalError("Could not load") }
 
-            cell.backView.backgroundColor = .clear
-            cell.genreLabel.textColor = .black
-
+            cell.didDeselect(indexPath.row)
+            
             if collectionView.indexPathsForSelectedItems?.count == 0 {
                 guard let indexPath = headerCollectionView.indexPathsForSelectedItems?.first else {return}
-                fetchMovieList(listName: Header.allCases[indexPath.row].rawValue)
+                fetchMovieList(endpoint: MoviesEndPoint.allCases[indexPath.row])
             }
         }
         

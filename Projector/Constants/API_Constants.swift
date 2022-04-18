@@ -6,25 +6,6 @@
 //
 
 import Foundation
-import UIKit
-
-enum Header: String, CaseIterable {
-
-    case nowPlaying = "now_playing"
-    case popular = "popular"
-    case topRated = "top_rated"
-    case upcoming = "upcoming"
-
-    var headerTitle: String {
-        
-        switch self {
-            case .nowPlaying: return "Now Playing"
-            case .upcoming: return "Upcoming"
-            case .topRated: return "Top Rated"
-            case .popular: return "Popular"
-        }
-    }
-}
 
 struct API {
     

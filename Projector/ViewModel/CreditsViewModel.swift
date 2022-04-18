@@ -7,11 +7,55 @@
 
 import Foundation
 
-struct CreditsViewModel {
+protocol CreditsViewModelDelegate: AnyObject {
+
+    func updateCastCollectionView()
+}
     
-    let cast: [Cast]
-    let crew: [Cast]
+class CreditsViewModel {
     
+    var cast: [Cast]?
+    var crew: [Cast]?
     
+    weak var delegate: CreditsViewModelDelegate?
+    private var service: NetworkManagerProtocol
     
+    init(service: NetworkManager = NetworkManager.shared) {
+        self.service = service
+    }
+    
+    func fetchCredits(with id: String) {
+        
+        service.fetch(endpoint: MovieDetailEndPoint.credits(id: id), model: Credits.self) {
+            [weak self] credits in
+            
+            guard let credits = credits else { return }
+            
+            self?.cast = credits.cast
+            self?.crew = credits.crew
+            
+            DispatchQueue.main.async {
+                self?.delegate?.updateCastCollectionView()
+            }
+        }
+    }
+    
+    func castAtIndex(_ index: Int) -> CreditViewModel {
+        
+        guard let cast = cast?[index] else { fatalError("Error") }
+        return CreditViewModel(cast: cast)
+        
+    }
+    
+}
+
+class CreditViewModel {
+    
+    var cast: Cast
+    
+    init(cast: Cast) {
+        self.cast = cast
+    }
+    
+ 
 }

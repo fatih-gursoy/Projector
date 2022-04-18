@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="rE8-h0-WOI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="rE8-h0-WOI">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -42,7 +42,7 @@
                                         </cells>
                                     </collectionView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uWT-rc-kMR">
-                                        <rect key="frame" x="0.0" y="56.5" width="414" height="66.5"/>
+                                        <rect key="frame" x="0.0" y="56.5" width="414" height="100"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="cvb-Hd-UZ4">
                                             <size key="itemSize" width="128" height="128"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -51,7 +51,7 @@
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="CLX-dz-unr">
-                                                <rect key="frame" x="0.0" y="-31" width="128" height="128"/>
+                                                <rect key="frame" x="0.0" y="-14" width="128" height="128"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="OFg-OQ-nqa">
                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
@@ -61,20 +61,20 @@
                                         </cells>
                                     </collectionView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="anp-tp-DpW">
-                                        <rect key="frame" x="0.0" y="133" width="414" height="532"/>
+                                        <rect key="frame" x="0.0" y="166.5" width="414" height="498.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hfG-hf-TJH">
-                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="itemSize" width="128" height="350"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="dCv-OJ-mSI">
-                                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                <rect key="frame" x="0.0" y="74.5" width="128" height="350"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="RqK-VH-w3x">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="350"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </collectionViewCellContentView>
                                             </collectionViewCell>
@@ -82,11 +82,11 @@
                                     </collectionView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="anp-tp-DpW" firstAttribute="height" secondItem="yA6-8H-l30" secondAttribute="height" multiplier="0.8" id="6Uc-c5-2sd"/>
+                                    <constraint firstItem="anp-tp-DpW" firstAttribute="height" secondItem="yA6-8H-l30" secondAttribute="height" multiplier="0.75" id="6Uc-c5-2sd"/>
                                     <constraint firstAttribute="trailing" secondItem="uWT-rc-kMR" secondAttribute="trailing" id="GFM-DJ-MYT"/>
                                     <constraint firstAttribute="trailing" secondItem="anp-tp-DpW" secondAttribute="trailing" id="H7q-gC-1oS"/>
                                     <constraint firstItem="anp-tp-DpW" firstAttribute="leading" secondItem="yA6-8H-l30" secondAttribute="leading" id="TUi-mL-b7D"/>
-                                    <constraint firstItem="uWT-rc-kMR" firstAttribute="height" secondItem="yA6-8H-l30" secondAttribute="height" multiplier="0.1" id="UhN-BA-B9R"/>
+                                    <constraint firstItem="uWT-rc-kMR" firstAttribute="height" secondItem="yA6-8H-l30" secondAttribute="height" multiplier="0.15" id="UhN-BA-B9R"/>
                                     <constraint firstAttribute="trailing" secondItem="nuU-4N-Owu" secondAttribute="trailing" id="YQv-7h-sy6"/>
                                     <constraint firstItem="uWT-rc-kMR" firstAttribute="leading" secondItem="yA6-8H-l30" secondAttribute="leading" id="cRe-pP-zg7"/>
                                     <constraint firstItem="nuU-4N-Owu" firstAttribute="leading" secondItem="yA6-8H-l30" secondAttribute="leading" id="fzM-Ur-gQy"/>
@@ -161,7 +161,7 @@
         <!--Movie DetailVC-->
         <scene sceneID="phk-SV-CTk">
             <objects>
-                <viewController id="byE-Ly-gYm" customClass="MovieDetailVC" customModule="Projector" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MovieDetailVC" id="byE-Ly-gYm" customClass="MovieDetailVC" customModule="Projector" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Flk-ks-XVb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -170,7 +170,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="313.5"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NiW-Oy-ODv" userLabel="Card View">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NiW-Oy-ODv" userLabel="Card View" customClass="CustomView" customModule="Projector" customModuleProvider="target">
                                 <rect key="frame" x="50" y="266.5" width="364" height="94"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="g6O-Kw-TST" userLabel="Card Stack">
@@ -227,6 +227,23 @@
                                     <constraint firstAttribute="bottom" secondItem="g6O-Kw-TST" secondAttribute="bottom" constant="10" id="c6T-ct-jro"/>
                                     <constraint firstItem="g6O-Kw-TST" firstAttribute="centerY" secondItem="NiW-Oy-ODv" secondAttribute="centerY" id="lOR-Px-q0p"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                        <size key="value" width="5" height="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="d88-bZ-xej">
                                 <rect key="frame" x="10" y="375.5" width="394" height="417.5"/>
@@ -235,10 +252,10 @@
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="125.5"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="QWU-eR-HPb">
-                                                <rect key="frame" x="0.0" y="0.0" width="394" height="70.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="394" height="55.5"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vnJ-o0-gBH">
-                                                        <rect key="frame" x="0.0" y="8" width="269" height="54.5"/>
+                                                        <rect key="frame" x="0.0" y="0.5" width="269" height="54.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRk-R5-jPe">
                                                                 <rect key="frame" x="0.0" y="0.0" width="113.5" height="24"/>
@@ -266,7 +283,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jIG-fA-IMy" userLabel="ButtonStack">
-                                                        <rect key="frame" x="279" y="9" width="115" height="52.5"/>
+                                                        <rect key="frame" x="279" y="1.5" width="115" height="52.5"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DcO-LL-h3g" userLabel="Bookmark">
                                                                 <rect key="frame" x="0.0" y="0.0" width="52.5" height="52.5"/>
@@ -300,20 +317,20 @@
                                                 </subviews>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TO2-OI-pYk">
-                                                <rect key="frame" x="0.0" y="75.5" width="394" height="50"/>
+                                                <rect key="frame" x="0.0" y="60.5" width="394" height="65"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="5" minimumInteritemSpacing="5" id="IDL-m6-rhG">
-                                                    <size key="itemSize" width="50" height="50"/>
+                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="5" id="IDL-m6-rhG">
+                                                    <size key="itemSize" width="50" height="65"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="JYY-3Z-NH5">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="65"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="lHb-jY-Zh4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="65"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </collectionViewCellContentView>
                                                     </collectionViewCell>
@@ -576,12 +593,12 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="iQ4-Vb-nVf"/>
+        <segue reference="G5W-Nh-T6e"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="bookmark" catalog="system" width="112" height="128"/>
-        <image name="chevron.backward.circle.fill" catalog="system" width="128" height="121"/>
         <image name="chevron.backward.circle.fill" width="128" height="128"/>
+        <image name="chevron.backward.circle.fill" catalog="system" width="128" height="121"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="list.star" catalog="system" width="128" height="94"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
