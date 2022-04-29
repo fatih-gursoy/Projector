@@ -22,12 +22,6 @@ class MainViewController: UIViewController {
         
     }
     
-    @objc func toSearchVC() {
-        
-        let searchVC = SearchViewController()
-        self.navigationController?.pushViewController(searchVC, animated: true)
-
-    }
     
     func configureNavBar() {
         
@@ -37,6 +31,14 @@ class MainViewController: UIViewController {
         let imageView = UIImageView(image: logo)
         self.navigationItem.titleView = imageView
         
+    }
+    
+    @objc func toSearchVC() {
+        
+        guard let searchVC = self.storyboard?.instantiateViewController(withIdentifier: "SearchVC") as? SearchViewController else { fatalError("Error")}
+        
+        self.navigationController?.pushViewController(searchVC, animated: true)
+
     }
     
     func configureCollectionView() {
@@ -206,16 +208,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-                
-        if collectionView == moviesCollectionView {
                         
-            guard let movieDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailVC") as? MovieDetailVC else { fatalError("Error")}
-                    
-            movieDetailVC.movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
-            self.navigationController?.pushViewController(movieDetailVC, animated: true)
-
-        }
-        
         if collectionView == headerCollectionView {
             
             guard let cell = collectionView.cellForItem(at: indexPath) as? HeaderCell else { fatalError("Could not load") }
@@ -229,37 +222,24 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             guard let cell = collectionView.cellForItem(at: indexPath) as? GenreCell else { fatalError("Could not load") }
             
-            cell.didSelect(indexPath.row)
-
-            let selectedGenre = genresViewModel.genreAtIndex(indexPath.row)
-
-            cell.configure(viewModel: selectedGenre)
-                        
-//            var selectedGenres = [Genre]()
-//
-//            if let indexPaths = collectionView.indexPathsForSelectedItems {
-//
-//                for indexPath in indexPaths {
-//
-//                    if let genre = genreViewModel?.genreList?[indexPath.row] {
-//                        if genre.isSelected == true {
-//                            selectedGenres.append(genre)
-//                        }
-//                    }
-//                }
-//            }
-//
-//            guard let filteredMovies = moviesViewModel?.filterByGenre(selectedGenres) else {return}
-//
-//            if selectedGenres.count > 0 {
-//                moviesViewModel = MoviesViewModel(movieList: filteredMovies)
-//            } else {
-//                fetchMovieList(listName: Header.allCases[headerIndex].rawValue)
-//            }
+            genresViewModel.selectGenreAtIndex(indexPath.row)
+            cell.didSelect(viewModel: genresViewModel.genreAtIndex(indexPath.row))
             
-                
+            let selectedGenres = genresViewModel.genreList.filter { $0.isSelected == true }
+            
+            let filteredMovies = moviesViewModel.filterByGenre(selectedGenres)
+            moviesViewModel.movieList = filteredMovies
+            
             moviesCollectionView.reloadData()
-            collectionView.reloadData()
+        }
+        
+        if collectionView == moviesCollectionView {
+                        
+            guard let movieDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailVC") as? MovieDetailVC else { fatalError("Error")}
+                    
+            movieDetailVC.movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
+            self.navigationController?.pushViewController(movieDetailVC, animated: true)
+
         }
     }
     
@@ -277,8 +257,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == genreCollectionView {
             
             guard let cell = collectionView.cellForItem(at: indexPath) as? GenreCell else { fatalError("Could not load") }
-
-            cell.didDeselect(indexPath.row)
+            
+            genresViewModel.selectGenreAtIndex(indexPath.row)
+            cell.didDeSelect(viewModel: genresViewModel.genreAtIndex(indexPath.row))
             
             if collectionView.indexPathsForSelectedItems?.count == 0 {
                 guard let indexPath = headerCollectionView.indexPathsForSelectedItems?.first else {return}

@@ -26,10 +26,8 @@ class CreditsViewModel {
     
     func fetchCredits(with id: String) {
         
-        service.fetch(endpoint: MovieDetailEndPoint.credits(id: id), model: Credits.self) {
-            [weak self] credits in
-            
-            guard let credits = credits else { return }
+        service.fetch(endpoint: MovieDetailEndPoint.credits(id: id)) {
+            [weak self] (credits: Credits) in
             
             self?.cast = credits.cast
             self?.crew = credits.crew

@@ -1,26 +1,24 @@
 PODS:
   - Alamofire (5.5.0)
   - AnimatedCollectionViewLayout (1.1.0)
-  - SDWebImage (5.12.1):
-    - SDWebImage/Core (= 5.12.1)
-  - SDWebImage/Core (5.12.1)
+  - Kingfisher (7.2.1)
 
 DEPENDENCIES:
   - Alamofire (~> 5.5)
   - AnimatedCollectionViewLayout
-  - SDWebImage
+  - Kingfisher (~> 7.2)
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - AnimatedCollectionViewLayout
-    - SDWebImage
+    - Kingfisher
 
 SPEC CHECKSUMS:
   Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
   AnimatedCollectionViewLayout: 0c1a38c4be115c525c887be183fc91ef65737c5d
-  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
+  Kingfisher: 7c084bebf7d548c623ad41bcf765fb200efed369
 
-PODFILE CHECKSUM: 4f3b1af7dce6b0515850eaf9b2ea265d3a1223dd
+PODFILE CHECKSUM: e4f65151acf43d0135cabf1c23fe02d7c3285100
 
 COCOAPODS: 1.11.2

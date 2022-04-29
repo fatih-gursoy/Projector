@@ -109,8 +109,6 @@
                         <outlet property="genreCollectionView" destination="uWT-rc-kMR" id="OI7-0M-Koj"/>
                         <outlet property="headerCollectionView" destination="nuU-4N-Owu" id="zM5-Or-9uV"/>
                         <outlet property="moviesCollectionView" destination="anp-tp-DpW" id="eJ4-P6-R8S"/>
-                        <segue destination="byE-Ly-gYm" kind="show" identifier="toMovieDetail" id="G5W-Nh-T6e"/>
-                        <segue destination="KBg-G8-KzW" kind="show" identifier="toSearchVC" id="Bl0-Sh-KMg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -120,18 +118,18 @@
         <!--Search View Controller-->
         <scene sceneID="hIb-tX-H2n">
             <objects>
-                <viewController id="KBg-G8-KzW" customClass="SearchViewController" customModule="Projector" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SearchVC" id="KBg-G8-KzW" customClass="SearchViewController" customModule="Projector" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="liE-ot-uQI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" rowHeight="100" estimatedRowHeight="100" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ZXL-VO-ZfI">
-                                <rect key="frame" x="0.0" y="139" width="414" height="674"/>
+                                <rect key="frame" x="0.0" y="95" width="414" height="767"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="sectionIndexBackgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <searchBar contentMode="redraw" placeholder="Search a movie" translatesAutoresizingMaskIntoConstraints="NO" id="Gas-Pf-xMx">
-                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                         </subviews>
@@ -151,12 +149,11 @@
                     <connections>
                         <outlet property="movieTableView" destination="ZXL-VO-ZfI" id="f64-q6-dcs"/>
                         <outlet property="searchBar" destination="Gas-Pf-xMx" id="gWa-Ax-qvz"/>
-                        <segue destination="byE-Ly-gYm" kind="show" identifier="toMovieDetail" id="iQ4-Vb-nVf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="21u-AA-LCx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1803" y="816"/>
+            <point key="canvasLocation" x="1829" y="876"/>
         </scene>
         <!--Movie DetailVC-->
         <scene sceneID="phk-SV-CTk">
@@ -246,16 +243,16 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="d88-bZ-xej">
-                                <rect key="frame" x="10" y="375.5" width="394" height="417.5"/>
+                                <rect key="frame" x="10" y="375.5" width="394" height="466.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="grR-fk-F4p" userLabel="Movie Stack">
-                                        <rect key="frame" x="0.0" y="0.0" width="394" height="125.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="394" height="140"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="QWU-eR-HPb">
-                                                <rect key="frame" x="0.0" y="0.0" width="394" height="55.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="394" height="70"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="vnJ-o0-gBH">
-                                                        <rect key="frame" x="0.0" y="0.5" width="269" height="54.5"/>
+                                                        <rect key="frame" x="0.0" y="8" width="269.5" height="54.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CRk-R5-jPe">
                                                                 <rect key="frame" x="0.0" y="0.0" width="113.5" height="24"/>
@@ -282,8 +279,8 @@
                                                             </stackView>
                                                         </subviews>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jIG-fA-IMy" userLabel="ButtonStack">
-                                                        <rect key="frame" x="279" y="1.5" width="115" height="52.5"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jIG-fA-IMy" userLabel="ButtonStack">
+                                                        <rect key="frame" x="279.5" y="9" width="114.5" height="52.5"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DcO-LL-h3g" userLabel="Bookmark">
                                                                 <rect key="frame" x="0.0" y="0.0" width="52.5" height="52.5"/>
@@ -300,7 +297,7 @@
                                                                 </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4w6-Na-PrX">
-                                                                <rect key="frame" x="62.5" y="0.0" width="52.5" height="52.5"/>
+                                                                <rect key="frame" x="62.5" y="0.0" width="52" height="52"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" secondItem="4w6-Na-PrX" secondAttribute="height" multiplier="1:1" id="TXV-wU-lYm"/>
                                                                 </constraints>
@@ -315,34 +312,42 @@
                                                         </subviews>
                                                     </stackView>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="jIG-fA-IMy" secondAttribute="trailing" id="aNF-Tw-pVJ"/>
+                                                </constraints>
                                             </stackView>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="TO2-OI-pYk">
-                                                <rect key="frame" x="0.0" y="60.5" width="394" height="65"/>
+                                                <rect key="frame" x="0.0" y="75" width="394" height="65"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="5" id="IDL-m6-rhG">
-                                                    <size key="itemSize" width="50" height="65"/>
+                                                    <size key="itemSize" width="50" height="50"/>
                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="JYY-3Z-NH5">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="65"/>
+                                                        <rect key="frame" x="0.0" y="7.5" width="50" height="50"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="lHb-jY-Zh4">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="65"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </collectionViewCellContentView>
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="QWU-eR-HPb" firstAttribute="leading" secondItem="grR-fk-F4p" secondAttribute="leading" id="3Ax-8N-bhU"/>
+                                            <constraint firstAttribute="trailing" secondItem="QWU-eR-HPb" secondAttribute="trailing" id="ArI-Qm-hoL"/>
+                                            <constraint firstItem="QWU-eR-HPb" firstAttribute="top" secondItem="grR-fk-F4p" secondAttribute="top" id="FNj-Gv-xN2"/>
+                                        </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="laF-7h-gfp" userLabel="Summary Stack">
-                                        <rect key="frame" x="0.0" y="130.5" width="394" height="287"/>
+                                        <rect key="frame" x="0.0" y="145" width="394" height="321.5"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vj1-Yj-Zr4">
-                                                <rect key="frame" x="0.0" y="0.0" width="394" height="287"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="394" height="321.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Overview" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CWO-pA-TlO" userLabel="Summary">
                                                         <rect key="frame" x="0.0" y="0.0" width="394" height="21.5"/>
@@ -374,7 +379,7 @@
                                                         <viewLayoutGuide key="frameLayoutGuide" id="0X6-FG-Abp"/>
                                                     </scrollView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="r8s-k1-gHV">
-                                                        <rect key="frame" x="0.0" y="158" width="394" height="129"/>
+                                                        <rect key="frame" x="0.0" y="177" width="394" height="144.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cast &amp; Crew" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" id="ERb-Mq-0XV">
                                                                 <rect key="frame" x="0.0" y="0.0" width="104" height="21.5"/>
@@ -384,20 +389,20 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NF3-pb-FdN">
-                                                                <rect key="frame" x="0.0" y="26.5" width="394" height="102.5"/>
+                                                                <rect key="frame" x="0.0" y="26.5" width="394" height="118"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="d0d-Vk-RBa">
-                                                                    <size key="itemSize" width="75" height="75"/>
+                                                                    <size key="itemSize" width="80" height="80"/>
                                                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                                 </collectionViewFlowLayout>
                                                                 <cells>
                                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ik4-yl-Td0">
-                                                                        <rect key="frame" x="0.0" y="14" width="75" height="75"/>
+                                                                        <rect key="frame" x="0.0" y="19" width="80" height="80"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="QTQ-15-i6Y">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                         </collectionViewCellContentView>
                                                                     </collectionViewCell>
@@ -454,7 +459,9 @@
                             <constraint firstItem="CEk-M7-XdA" firstAttribute="trailing" secondItem="NiW-Oy-ODv" secondAttribute="trailing" id="wtG-iL-M1X"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="3KU-zC-kBS"/>
+                    <navigationItem key="navigationItem" id="3KU-zC-kBS">
+                        <barButtonItem key="backBarButtonItem" title=" " id="vKK-VB-Pvd"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="bookmarkButton" destination="DcO-LL-h3g" id="vhH-hO-riA"/>
                         <outlet property="cardView" destination="NiW-Oy-ODv" id="uNs-w4-pDs"/>
@@ -469,7 +476,6 @@
                         <outlet property="voteCountLabel" destination="rfw-Ab-u89" id="4bq-9N-RMz"/>
                         <outlet property="watchButton" destination="4w6-Na-PrX" id="S2Y-ax-CWT"/>
                         <outlet property="yearLabel" destination="yD2-4a-uGJ" id="RbO-cI-b84"/>
-                        <segue destination="R0q-jE-26E" kind="show" identifier="toMoreLikeVC" id="Rfm-9R-GiB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zvF-Im-xMg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -485,7 +491,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="100" estimatedRowHeight="100" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="QWV-La-8z8">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="sectionIndexBackgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
@@ -501,14 +507,13 @@
                     <navigationItem key="navigationItem" id="8GF-Rh-P8A"/>
                     <connections>
                         <outlet property="movieTableView" destination="QWV-La-8z8" id="IQx-cx-7RJ"/>
-                        <segue destination="byE-Ly-gYm" kind="show" identifier="toMovieDetailVC" id="54E-tm-BKc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nw8-VK-Rk0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3516" y="80"/>
         </scene>
-        <!--Watch List-->
+        <!--Watch ListVC-->
         <scene sceneID="3dh-pr-n1E">
             <objects>
                 <viewController id="s8C-KI-JFL" customClass="WatchListVC" customModule="Projector" customModuleProvider="target" sceneMemberID="viewController">
@@ -517,11 +522,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="N0x-JG-z1g">
-                                <rect key="frame" x="0.0" y="44" width="414" height="51"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="100" estimatedRowHeight="100" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="sjB-PV-PlP">
-                                <rect key="frame" x="0.0" y="95" width="414" height="718"/>
+                                <rect key="frame" x="0.0" y="139" width="414" height="674"/>
                                 <color key="sectionIndexBackgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                         </subviews>
@@ -537,17 +542,15 @@
                             <constraint firstItem="sjB-PV-PlP" firstAttribute="top" secondItem="N0x-JG-z1g" secondAttribute="bottom" id="xhu-bR-Cph"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Watch List" image="star.square.fill" catalog="system" id="AZv-VF-PSa"/>
                     <navigationItem key="navigationItem" id="64U-WD-zdI"/>
                     <connections>
                         <outlet property="movieTableView" destination="sjB-PV-PlP" id="RIR-Jc-vwb"/>
                         <outlet property="searchBar" destination="N0x-JG-z1g" id="uQQ-rg-hOc"/>
-                        <segue destination="byE-Ly-gYm" kind="show" identifier="toMovieDetailVC" id="0dQ-4p-8V9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tZU-Hz-302" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1274" y="-833"/>
+            <point key="canvasLocation" x="1830" y="-777"/>
         </scene>
         <!--Trending-->
         <scene sceneID="Yej-G5-OvY">
@@ -581,28 +584,46 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" systemColor="systemGreenColor"/>
+                        <tabBarAppearance key="standardAppearance" stackedItemPositioning="fill"/>
                     </tabBar>
                     <connections>
                         <segue destination="3L3-r4-Y4X" kind="relationship" relationship="viewControllers" id="Mcn-UT-PUb"/>
-                        <segue destination="s8C-KI-JFL" kind="relationship" relationship="viewControllers" id="USY-10-NSP"/>
+                        <segue destination="NVY-kx-uF5" kind="relationship" relationship="viewControllers" id="nOj-Q2-hof"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uL5-2P-5AR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-17.39130434782609" y="79.6875"/>
         </scene>
+        <!--Watch List-->
+        <scene sceneID="UTN-sI-iab">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="NVY-kx-uF5" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Watch List" image="star.circle.fill" catalog="system" id="S8g-28-8tj"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" backIndicatorTransitionMaskImage="chevron.backward.circle.fill" id="0Ah-O8-97E">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <imageReference key="backIndicatorImage" image="chevron.backward.circle.fill" catalog="system" symbolScale="large" renderingMode="original"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="s8C-KI-JFL" kind="relationship" relationship="rootViewController" id="bLj-Is-rKm"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bkj-Mo-jwx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="893" y="-777"/>
+        </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="G5W-Nh-T6e"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="bookmark" catalog="system" width="112" height="128"/>
-        <image name="chevron.backward.circle.fill" width="128" height="128"/>
         <image name="chevron.backward.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="chevron.backward.circle.fill" width="128" height="128"/>
         <image name="eye.slash" catalog="system" width="128" height="86"/>
         <image name="list.star" catalog="system" width="128" height="94"/>
+        <image name="star.circle.fill" catalog="system" width="128" height="121"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
-        <image name="star.square.fill" catalog="system" width="128" height="114"/>
         <image name="video.fill" catalog="system" width="128" height="82"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

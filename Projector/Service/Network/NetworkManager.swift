@@ -10,8 +10,8 @@ import Alamofire
 
 protocol NetworkManagerProtocol: AnyObject {
     
-    func fetch<T:Decodable>(endpoint: EndPoint, model: T.Type, completion: @escaping (T?) -> Void)
-    func fetchWithURL<T:Decodable>(endpoint: EndPoint, model: T.Type, completion: @escaping (T?) -> Void)
+    func fetch<T:Decodable>(endpoint: EndPoint, completion: @escaping (T) -> Void)
+    func fetchWithURL<T:Decodable>(endpoint: EndPoint, completion: @escaping (T) -> Void)
 
 }
 
@@ -23,7 +23,7 @@ final class NetworkManager: NetworkManagerProtocol {
     
     private init() {}
     
-    func fetch<T:Decodable>(endpoint: EndPoint, model: T.Type, completion: @escaping (T?) -> Void) {
+    func fetch<T:Decodable>(endpoint: EndPoint, completion: @escaping (T) -> Void) {
         
         let url = endpoint.baseURL + endpoint.path + "?api_key=\(apiKey)" + endpoint.body
         let request = AF.request(url)
@@ -36,7 +36,7 @@ final class NetworkManager: NetworkManagerProtocol {
         }
     }
     
-    func fetchWithURL<T:Decodable>(endpoint: EndPoint, model: T.Type, completion: @escaping (T?) -> Void) {
+    func fetchWithURL<T:Decodable>(endpoint: EndPoint, completion: @escaping (T) -> Void) {
         
         guard let url = URL(string: endpoint.baseURL + endpoint.path + "?api_key=\(apiKey)" + endpoint.body) else { return }
         

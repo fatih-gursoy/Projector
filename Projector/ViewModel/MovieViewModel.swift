@@ -46,7 +46,8 @@ class MovieViewModel {
     }
     
     var isWatched: Bool? {
-        return movie.isWatched
+        get { return movie.isWatched }
+        set { movie.isWatched = newValue }
     }
     
     var backdropURL: String? {
@@ -83,22 +84,11 @@ class MovieViewModel {
         return year
     }
     
-    func updateWatchStatus() {
-        
-        let items = CoreService().fetchData()
-        let item = items.filter { $0.movieId == self.id }
-        
-        if item.count > 0 {
-            movie.isWatched = item[0].isWatched
-        }
-    }
-    
     func fetchMovieDetail(with id: String) {
         
-        service.fetch(endpoint: MovieDetailEndPoint.movieDetail(id: id), model: Movie.self) {
-            [weak self] movie in
+        service.fetch(endpoint: MovieDetailEndPoint.movieDetail(id: id)) {
+            [weak self] (movie: Movie) in
             
-            guard let movie = movie else { return }
             self?.movie = movie
             
             DispatchQueue.main.async {

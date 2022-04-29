@@ -19,6 +19,10 @@ class GenreViewModel {
         return genre.name
     }
     
+    var genreId: String? {
+        return String(describing: genre.id)
+    }
+    
     var isSelected: Bool? {
         return genre.isSelected
     }
@@ -47,14 +51,14 @@ class GenresViewModel {
     
     func fetchGenres() {
         
-        service.fetch(endpoint: MovieDetailEndPoint.genres, model: GenreList.self) {
-            genreList in
+        service.fetch(endpoint: MovieDetailEndPoint.genres) {
+            [weak self] (genreList: GenreList) in
             
-            guard let genres = genreList?.genres else { return }
-            self.genreList = genres
+            guard let genres = genreList.genres else {return}
+            self?.genreList = genres
 
             DispatchQueue.main.async {
-                self.delegate?.updateGenreView()
+                self?.delegate?.updateGenreView()
             }
         }
     }
@@ -72,9 +76,5 @@ class GenresViewModel {
             self.genreList[index].isSelected = true
         }
     }
-    
-    
-    
-    
     
 }

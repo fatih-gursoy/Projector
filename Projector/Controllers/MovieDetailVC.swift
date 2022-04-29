@@ -25,9 +25,7 @@ class MovieDetailVC: UIViewController {
     @IBOutlet private weak var castCollectionView: UICollectionView!
     
     private let notificationCenter: NotificationCenter = NotificationCenter.default
-    
-    private var CoreDataService = CoreService()
-    private var watchList = [WatchList]()
+    private var coreDataManager = CoreDataManager()
 
     var movieViewModel: MovieViewModel?
     var creditsViewModel = CreditsViewModel()
@@ -75,87 +73,50 @@ class MovieDetailVC: UIViewController {
 
             movieViewModel.fetchMovieDetail(with: id)
             creditsViewModel.fetchCredits(with: id)
-            
-            movieViewModel.updateWatchStatus()
-            
+                        
         }
     }
     
     @IBAction func watchButtonClicked(_ sender: Any) {
         
-        watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
-        addToWatchList()
         setButtonImage()
-        
         notificationCenter.post(name: NSNotification.Name(rawValue: "UpdateWatchList"), object: nil)
+
+    }
+    
+    func setButtonImage() {
         
+        guard let movieId = movieViewModel?.id else { return }
+        let isWatched = coreDataManager.updateMovie(movieId)
+        movieViewModel?.isWatched = isWatched
+
+        isWatched ? watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal) :   self.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+
     }
     
     @IBAction func bookmarkButtonClicked(_ sender: Any) {
         
         if let movieId = movieViewModel?.id {
-        
-            if let movie = CoreDataService.fetchMovie(movieId)  {
-                CoreDataService.deleteItem(with: movie)
+            
+            if let movie = coreDataManager.fetchMovie(movieId)  {
+                coreDataManager.deleteMovie(with: movie)
                 bookmarkButton.setImage(UIImage(systemName: "bookmark"), for: .normal)
             } else {
-                addToWatchList()
+                coreDataManager.addNewMovie(movieId)
+                bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
             }
         }
+
         notificationCenter.post(name: NSNotification.Name(rawValue: "UpdateWatchList"), object: nil)
     }
     
-    func addToWatchList() {
-
-//        bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-//
-//        let context = CoreDataModel.context
-//        watchList = CoreDataService.watchList
-//
-//        if watchList.count < 1 {
-//
-//            let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
-//
-//            newMovie.setValue(movieViewModel?.id, forKey:"movieId")
-//            newMovie.setValue(false, forKey: "isWatched")
-//            makeAlert(titleString: "Added to Watch List", messageString: "")
-//
-//        } else {
-//
-//            if !(watchList.contains(where: { $0.movieId == movieViewModel?.id})) {
-//                let newMovie = NSEntityDescription.insertNewObject(forEntityName: CoreDataModel.entitiyName, into: context)
-//
-//                newMovie.setValue(movieViewModel?.id, forKey:"movieId")
-//                newMovie.setValue(false, forKey: "isWatched")
-//                makeAlert(titleString: "Added to Watch List", messageString: "")
-//            }
-//        }
-//        CoreDataService.saveToCoreData()
-    }
-    
-    func setButtonImage() {
-              
-//        watchList = CoreDataService.watchList
-//        let movie = watchList.filter { $0.movieId == movieViewModel?.id }
-//        guard let movie = movie.first else {return}
-//
-//        movie.isWatched = !(movie.isWatched)
-//        movieViewModel?.updateWatchStatus()
-//
-//        DispatchQueue.main.async {
-//            if movie.isWatched {
-//                self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
-//            } else {
-//                self.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-//            }
-//        }
-    }
     
     @IBAction func moreLikeButtonClicked(_ sender: Any) {
         
-//        let moreLikeVC = MoreMoviesVC()
-//        self.navigationController?.pushViewController(moreLikeVC, animated: true)
-//        moreLikeVC.movieId = movieViewModel?.id
+        guard let moreMoviesVC = self.storyboard?.instantiateViewController(withIdentifier: "MoreMoviesVC") as? MoreMoviesVC else { fatalError("Error")}
+        
+        moreMoviesVC.movieId = movieViewModel?.id
+        self.navigationController?.pushViewController(moreMoviesVC, animated: true)
     }
 
 
@@ -216,14 +177,14 @@ extension MovieDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, U
         guard let item = movieViewModel?.genres?[indexPath.row].name else {return CGSize()}
             
             let itemWidth = (item.size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17)]).width) + 40
-            let itemHeight = collectionView.bounds.height * 1
+            let itemHeight = collectionView.bounds.height * 0.8
 
             return CGSize(width: itemWidth, height: itemHeight)
             
         case castCollectionView:
             
             let itemWidth = collectionView.bounds.width * 0.25
-            let itemHeight = collectionView.bounds.height
+            let itemHeight = collectionView.bounds.height * 0.90
 
             return CGSize(width: itemWidth, height: itemHeight)
             
@@ -253,18 +214,14 @@ extension MovieDetailVC: MovieViewModelDelegate {
         if let photoURL = movieViewModel.backdropURL {
             self.movieImage.setImage(url: photoURL)
         }
-                
-        if let isWatched = movieViewModel.isWatched {
-                
+          
+        guard let movieId = movieViewModel.id else { return }
+        
+        if coreDataManager.watchList.filter ({ $0.movieId == movieId }).count < 1 {
+            self.watchButton.isHidden = true
+        } else {
             self.bookmarkButton.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
-            
-            if isWatched {
-                self.watchButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
-            } else if !isWatched {
-                self.watchButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-            }
         }
-
         self.genreCollectionView.reloadData()
     }
     
@@ -275,8 +232,4 @@ extension MovieDetailVC: CreditsViewModelDelegate {
     func updateCastCollectionView() {
         castCollectionView.reloadData()
     }
-    
-    
-    
-    
 }

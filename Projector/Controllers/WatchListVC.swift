@@ -6,79 +6,73 @@
 //
 
 import UIKit
-import CoreData
 
 class WatchListVC: UIViewController {
 
     @IBOutlet private weak var searchBar: UISearchBar!
     @IBOutlet private weak var movieTableView: UITableView!
     
-    var CoreDataService = CoreService()
-    var watchList = [WatchList]()
-
+    private var coreDataManager = CoreDataManager()
     private var moviesViewModel = MoviesViewModel()
+    
+    private let notificationCenter: NotificationCenter = NotificationCenter.default
         
     override func viewDidLoad() {
         super.viewDidLoad()
 
         movieTableView.delegate = self
         movieTableView.dataSource = self
-        
         searchBar.delegate = self
+        
         hideKeyboard()
         
         movieTableView.register(UINib(nibName: "MovieTableCellView", bundle: nil), forCellReuseIdentifier: "MovieTableCell")
-        
-        let notificationCenter: NotificationCenter = NotificationCenter.default
+                
         notificationCenter.addObserver(self, selector: #selector(updateUI), name: NSNotification.Name("UpdateWatchList") , object: nil)
 
         fetchWatchList()
+        moviesViewModel.delegate = self
 
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+        
     
     func fetchWatchList() {
 
-        watchList = CoreService().watchList
-
-        for item in watchList {
-            
-            if let movieId = item.movieId {
-                
-//                WebService().downloadMovieDetail(movieId: movieId) { movie in
-//                    guard let movie = movie else {return}
-//                    
-//                    var movieViewModel = MovieViewModel(movie: movie)
-//                    movieViewModel.updateWatchStatus()
-//                    self.moviesViewModel?.addMovie(movie: movieViewModel.movie)
-//
-//                    DispatchQueue.main.async {
-//                        self.movieTableView.reloadData()
-//                    }
-//                }
-            }
+        let watchList = coreDataManager.watchList
+        moviesViewModel.movieList.removeAll(keepingCapacity: false)
+        
+        for movie in watchList {
+            guard let movieId = movie.movieId else { return }
+            moviesViewModel.addMovie(movieId: movieId)
         }
         movieTableView.reloadData()
+        
     }
     
     @objc func updateUI() {
-        
         fetchWatchList()
-        
     }
 
 }
+
+extension WatchListVC: MoviesViewModelDelegate {
+    
+    func updateMoviesView() {
+        movieTableView.reloadData()
+    }
+    
+}
+
 
 extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        let count = moviesViewModel.count
-        return count
+        return moviesViewModel.count
         
     }
     
@@ -97,7 +91,8 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            CoreDataService.deleteItem(with: watchList[indexPath.row])
+            let movie = coreDataManager.watchList[indexPath.row]
+            coreDataManager.deleteMovie(with: movie)
             moviesViewModel.movieList.remove(at: indexPath.row)
             tableView.reloadData()
         }
@@ -105,8 +100,13 @@ extension WatchListVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        performSegue(withIdentifier: "toMovieDetailVC", sender: indexPath)
-
+        print("didselect")
+        
+        guard let movieDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "MovieDetailVC") as? MovieDetailVC else { fatalError("Error")}
+                
+        movieDetailVC.movieViewModel = moviesViewModel.movieAtIndex(indexPath.row)
+        self.navigationController?.pushViewController(movieDetailVC, animated: true)
+                
     }
     
 }

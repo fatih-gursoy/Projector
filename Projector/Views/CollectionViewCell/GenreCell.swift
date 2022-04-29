@@ -18,28 +18,27 @@ class GenreCell: UICollectionViewCell {
 
             genreLabel.text = genre.genreTitle
 
-//            if genre.isSelected == false || genre.isSelected == nil {
-//                backView.backgroundColor = .clear
-//                genreLabel.textColor = .black
-//            } else if genre.isSelected == true {
-//                backView.backgroundColor = .darkGray
-//                genreLabel.textColor = .white
-//            }
         }
     }
     
-    func didSelect(_ index:Int) {
+    func didSelect(viewModel: GenreViewModel?) {
         
-        backView.backgroundColor = .clear
-        genreLabel.textColor = .black
+        if viewModel?.isSelected == true {
         
+            backView.backgroundColor = .darkGray
+            genreLabel.textColor = .white
+            
+        }
     }
     
-    func didDeselect(_ index:Int) {
+    func didDeSelect(viewModel: GenreViewModel?) {
+
+        if viewModel?.isSelected == false {
         
-        backView.backgroundColor = .darkGray
-        genreLabel.textColor = .white
-        
+            backView.backgroundColor = .clear
+            genreLabel.textColor = .black
+            
+        }
     }
 
 }

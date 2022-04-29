@@ -20,7 +20,6 @@ extension EndPoint {
     var baseURL: String {
         return "https://api.themoviedb.org/3/"
     }
-
 }
 
 enum MoviesEndPoint: CaseIterable {

@@ -9,8 +9,7 @@
 /* Begin PBXBuildFile section */
 		3D085BD227AC7D04002C57B2 /* MovieDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D085BD127AC7D04002C57B2 /* MovieDetailVC.swift */; };
 		3D7105CA27B678E9004B2AE6 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7105C927B678E9004B2AE6 /* SearchViewController.swift */; };
-		3D7105D027BBED02004B2AE6 /* CoreData_Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7105CF27BBED02004B2AE6 /* CoreData_Constants.swift */; };
-		3D7105D227BC2090004B2AE6 /* CoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7105D127BC2090004B2AE6 /* CoreService.swift */; };
+		3D7105D227BC2090004B2AE6 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7105D127BC2090004B2AE6 /* CoreDataManager.swift */; };
 		3D7105D427BC6243004B2AE6 /* AlertFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D7105D327BC6243004B2AE6 /* AlertFunction.swift */; };
 		3DA07FDA27FF97C80025E010 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA07FD927FF97C80025E010 /* CustomImageView.swift */; };
 		3DA07FDC27FF9D2B0025E010 /* ImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA07FDB27FF9D2B0025E010 /* ImageView+Extension.swift */; };
@@ -51,8 +50,7 @@
 /* Begin PBXFileReference section */
 		3D085BD127AC7D04002C57B2 /* MovieDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailVC.swift; sourceTree = "<group>"; };
 		3D7105C927B678E9004B2AE6 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		3D7105CF27BBED02004B2AE6 /* CoreData_Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreData_Constants.swift; sourceTree = "<group>"; };
-		3D7105D127BC2090004B2AE6 /* CoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreService.swift; sourceTree = "<group>"; };
+		3D7105D127BC2090004B2AE6 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		3D7105D327BC6243004B2AE6 /* AlertFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertFunction.swift; sourceTree = "<group>"; };
 		3DA07FD927FF97C80025E010 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
 		3DA07FDB27FF9D2B0025E010 /* ImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageView+Extension.swift"; sourceTree = "<group>"; };
@@ -119,7 +117,6 @@
 			isa = PBXGroup;
 			children = (
 				3DF0839127AB2DB600CF9253 /* API_Constants.swift */,
-				3D7105CF27BBED02004B2AE6 /* CoreData_Constants.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -157,7 +154,7 @@
 		3DA07FE62804D7810025E010 /* DataPersistence */ = {
 			isa = PBXGroup;
 			children = (
-				3D7105D127BC2090004B2AE6 /* CoreService.swift */,
+				3D7105D127BC2090004B2AE6 /* CoreDataManager.swift */,
 			);
 			path = DataPersistence;
 			sourceTree = "<group>";
@@ -414,7 +411,7 @@
 				3DA8CBCB27B15318002801A8 /* HeaderCell.swift in Sources */,
 				3DA07FDC27FF9D2B0025E010 /* ImageView+Extension.swift in Sources */,
 				3DA07FE42804D7640025E010 /* EndPoint.swift in Sources */,
-				3D7105D227BC2090004B2AE6 /* CoreService.swift in Sources */,
+				3D7105D227BC2090004B2AE6 /* CoreDataManager.swift in Sources */,
 				3DACBCF327A0432C0046C80C /* Projector.xcdatamodeld in Sources */,
 				3DF0838127A4A9EB00CF9253 /* HelperFunctions.swift in Sources */,
 				3D7105D427BC6243004B2AE6 /* AlertFunction.swift in Sources */,
@@ -429,7 +426,6 @@
 				3DA8CBBF27AF2273002801A8 /* CreditsViewModel.swift in Sources */,
 				3DFA1B8227A3311100A08FEE /* MovieList.swift in Sources */,
 				3DACBD0427A045400046C80C /* Movie.swift in Sources */,
-				3D7105D027BBED02004B2AE6 /* CoreData_Constants.swift in Sources */,
 				3DA8CBBD27AF1F1A002801A8 /* Credits.swift in Sources */,
 				3DA12D7527C58A6600892440 /* MoreMoviesVC.swift in Sources */,
 				3DF0839227AB2DB600CF9253 /* API_Constants.swift in Sources */,

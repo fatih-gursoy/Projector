@@ -8,7 +8,7 @@ target 'Projector' do
   # Pods for Projector
 
 pod 'Alamofire', '~> 5.5'
-pod 'SDWebImage'
+pod 'Kingfisher', '~> 7.2'
 pod 'AnimatedCollectionViewLayout'
 
 end

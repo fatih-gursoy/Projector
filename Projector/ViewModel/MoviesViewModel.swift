@@ -35,12 +35,10 @@ class MoviesViewModel {
         
     }
     
-    func fetchMovies(from endPoint: MoviesEndPoint) {
+    func fetchMovies(from endPoint: EndPoint) {
         
-        service.fetch(endpoint: endPoint, model: MovieList.self) {
-            [weak self] movies in
+        service.fetch(endpoint: endPoint) { [weak self] (movies: MovieList) in
             
-            guard let movies = movies else { return }
             self?.movieList = movies.results
             
             DispatchQueue.main.async {
@@ -49,10 +47,21 @@ class MoviesViewModel {
         }
     }
     
-    func addMovie(movie: Movie) {
-
-        movieList.append(movie)
-
+    func addMovie(movieId: String?) {
+        
+        guard let movieId = movieId else { return }
+        
+        if !(movieList.contains(where: { String($0.id!) == movieId })) {
+            
+            service.fetch(endpoint: MovieDetailEndPoint.movieDetail(id: movieId)) { [weak self] (movie: Movie)  in
+                
+                self?.movieList.append(movie)
+    
+                DispatchQueue.main.async {
+                    self?.delegate?.updateMoviesView()
+                }
+            }
+        }
     }
     
     var movieIdList: [String?] {
@@ -67,9 +76,9 @@ class MoviesViewModel {
         var filteredMovies = [Movie]()
                 
         for movie in movieList {
-            
+
             for genre in selectedGenres {
-                
+
                 if (movie.genreIDs?.contains { $0 == genre.id } ) == true {
                     filteredMovies.append(movie)
                 }
