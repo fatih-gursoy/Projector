@@ -4,15 +4,14 @@ Projector is an iOS mobile app that enables to get all information about movies,
 
 ## Third-party libraries
 
- - [SD Web Image](https://github.com/SDWebImage/SDWebImage)
  - [Alamofire](https://github.com/Alamofire/Alamofire)
+ - [KingFisher](https://github.com/onevcat/Kingfisher)
  - [AnimatedCollectionViewLayout](https://github.com/KelvinJin/AnimatedCollectionViewLayout)
  
  ## Architecture
  - MVVM
  
  ## Screenshots
- 
 
 
 ![Picture1](./Assets/Screenshots/picture1.png)
